@@ -1,0 +1,71 @@
+---
+title: "flgaCBC"
+author: "Burnett, JL"
+date: "February 20, 2019"
+output: pdf_document
+---
+
+```{r libs, include=F}
+# Install packages as necessary
+list.of.packages <- c(
+    "stringr","ggplot2",  "here", "dplyr", "knitr", "tidyr", "reshape2", "readr")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+# Load pkgs
+lapply(list.of.packages, require, character.only = TRUE)
+```
+
+```{r setup, include=FALSE}
+# Set default chunk options
+knitr::opts_chunk$set( include = F, fig.cap = "...")
+# Define directories and create as necessary
+dataDir <- paste0(here::here(), "/data/")
+```
+
+## Import and munge Christmas Bird Count data & NACC species list
+```{r importMungeData}
+# Load CBC data
+birds <-
+  read.csv(paste0(dataDir,"CBC_flga_1957to2015.csv"), stringsAsFactors = FALSE, check.names = F) %>% 
+    gather(key = "key", value = "value", -(1:4), factor_key =T) %>% 
+    filter(!value %in% c("CW", "cw")) %>% 
+    mutate(value = as.integer(value))
+
+
+# Fix Snow Goose counts (there are two counts, Blue and White vars). need to add them and recast DF.
+birds$key <- gsub("Snow Goose-White","Snow Goose" , birds$key)
+birds$key <- gsub("Snow Goose-Blue", "Snow Goose" , birds$key)
+
+# Recast the data and add up snow geese counts
+birds <-  birds %>% 
+                group_by(year, key) %>% 
+                mutate(value =  sum(as.integer(value))) %>% 
+                distinct() %>% 
+                spread( key, value)
+
+# munge the species names of data to match NACC common names
+names(birds) <- editNames(birds)
+
+
+# Get NACC checklist (aou)
+if(!exists("nacc")){nacc <- getNACClist(remove.hypen = F)}
+
+
+# See which species are in birds but not in nacc.list
+setdiff(names(birds), nacc.list$common_name) %>% sort()
+  ## If there are issues, I recommend fixing them in the function editNames.R, or just do it in this chunk..
+
+## Un resolved issues, if necessary
+# NACC does not contain the following species that occur in CBC data:
+    # Gray-headed swamphen (Porphyrio poliocephalus)
+
+```
+
+```{r visualizeEffort}
+
+
+
+
+         
+```
