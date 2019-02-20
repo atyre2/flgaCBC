@@ -1,6 +1,6 @@
 #' @description Create species groups for grouped population trends
 #' @param df A dataframe containing species names and taxonomies (must include family, order, and common name)
-#' @export
+#' @export speciesGroups
 
 
 speciesGroups <- function(df){
@@ -183,176 +183,274 @@ sweetwater.spp <- c(
     # COGA what is this?
     "Double-Crested Cormorant",
     "King Rail",
+    "Marsh Wren",
     "Least Bittern",
     "Limpkin",
     # NOSH what is this
     "Purple Gallinule",
     "Snail Kite",
     "Sora",
-    "Virginia Rail"
+    "Virginia Rail",
+    # all herons
+    "Great Blue Heron",
+    "Little Blue Heron",
+    "Tricolored Heron",
+    "Green Heron",
+    "Black-Crowned Night-Heron",
+    "Yellow-Crowned Night-Heron",
+    # all ibis
+    "White Ibis",
+    "Glossy Ibis",
+    "White-Faced Ibis",
+    # stork
+    "Wood Stork"
+)
+
+
+# 9. Urban adapters
+urban.spp <- c(
+    nn.spp, # non-native species from above
+    "American Crow",
+    "Barn Owl",
+    "Blue Jay",
+    "Black Vulture",
+"Boat-Tailed Grackle",
+"Brown-Headed Cowbird",
+"Brown Thrasher",
+"Common Grackle",
+    "Canada Goose",
+    "Carolina Chickadee",
+    "Carolina Wren",
+"Chipping Sparrow",
+"Common Ground-Dove",
+    "Eastern Screech-Owl",
+"Eastern Towhee",
+    "Fish Crow",
+"Great-Horned Owl",
+    "Hooded Merganser",
+"House Finch",
+    "House Wren",
+        "Mallard",
+    "Mallard-Feral",
+"Northern Cardinal",
+"Pileated Woodpecker",
+"Northern Mockingbird",
+"Red-Shouldered Hawk",
+    "Ring-Billed Gull",
+"Tufted Titmouse",
+    "Turkey Vulture",
+    "Wood Duck"
+)
+
+
+agLoss.spp <-c(
+    "American Pipit",
+    "American Kestrel",
+    "Barn Owl",
+    "Boat-Tailed Grackle",
+    "Brown Thrasher",
+    "Common Ground-Dove",
+    "Common Grackle",
+    "Eastern Meadowlark",
+    "House Sparrow",
+    "Grasshopper Sparrow",
+    "Henslow's Sparrow",
+    "Field Sparrow",
+    "Northern Mockingbird",
+    "Killdeer",
+    "Loggerhead Shrike",
+    "Mourning Dove",
+    "Segde Wren",
+"Red-Tailed Hawk",
+    "Vesper Sparrow"
 
 )
 
 
-sweetwater.spp.aou <- c(
+feeder.spp <-c(
+    "American Goldfinch",
+    "American Crow",
+    "Baltimore Oriole",
+    "Brown-Headed Cowbird",
+    "Blue Jay",
 
+    "Carolina Chickadee",
+    "Carolina Wren",
+    "Chipping Sparrow",
+    "Cooper's Hawk",
+    "House Finch",
+    "Indigo Bunting",
+    "Northern Cardinal",
+    "Mourning Dove",
+    "Yellow-Throated Warbler",
+    "Painted Bunting",
+    "Pine Siskin",
+    "Ring-Billed Gull",
+    "Red-Bellied Woodpecker",
+    "Red-Breasted Nuthatch",
+    "Sharp-Shinned Hawk",
+    "Tufted Titmouse"
 )
+
 
 }
+
+
+
+
 
 # END RUN -----------------------------------------------------------------
 
 
-# Raptors -----------------------------------------------------------------
+# # Raptors -----------------------------------------------------------------
+#
+# raptors.subset <- droplevels(new.spp.list %>%
+#                                  filter(common_name  %in% c("Cooper'S Hawk", "American Kestrel", "Bald Eagle",
+#                                                             "Bald Eagle.1", "Bald Eagle.2", "Bald Eagle.3",
+#                                                             "Broad Winged Hawk", "Merlin", "Northern Harrier","Osprey",
+#                                                             "Peregrine Falcon", "Red Shouldered Hawk","Red Tailed Hawk",
+#                                                             "Rough Legged Hawk","Sharp Shinned Hawk", ""
+#                                  )))
+#
+# unique(raptors.subset$common_name)
+# # Insectivorous Open Country ----------------------------------------------
+#
+# insect.open <- droplevels(new.spp.list %>%
+#                               filter(
+#                                   common_name %in% c(
+#                                       "Eastern Phoebe",
+#                                       "Yellow Rumped Warbler",
+#                                       "Common Yellowthroat",
+#                                       "White Eyed Vireo",
+#                                       "Orange Crowned Warbler",
+#                                       "Palm Warbler",
+#                                       "Blue-Gray Gnatcatcher"
+#                                   )
+#                               ))
+#
+# # Common Open Country -----------------------------------------------------
+# comm.open <- droplevels(new.spp.list %>%
+#                             filter(
+#                                 common_name %in% c(
+#                                     "Eastern Phoebe",
+#                                     "Yellow Rumped Warbler",
+#                                     "Common Yellowthroat",
+#                                     "White Eyed Vireo",
+#                                     "Orange Crowned Warbler",
+#                                     "Palm Warbler",
+#                                     "Blue Gray Gnatcatcher",
+#                                     "Eastern Bluebird",
+#                                     "Eastern Towhee",
+#                                     "Northern Mockingbird",
+#                                     "Brown Thrasher",
+#                                     "Swamp Sparrow",
+#                                     "Gray Catbird"
+#                                 )
+#                             ))
+# unique(comm.open$common_name)
 
-raptors.subset <- droplevels(new.spp.list %>%
-                                 filter(common_name  %in% c("Cooper'S Hawk", "American Kestrel", "Bald Eagle",
-                                                            "Bald Eagle.1", "Bald Eagle.2", "Bald Eagle.3",
-                                                            "Broad Winged Hawk", "Merlin", "Northern Harrier","Osprey",
-                                                            "Peregrine Falcon", "Red Shouldered Hawk","Red Tailed Hawk",
-                                                            "Rough Legged Hawk","Sharp Shinned Hawk", ""
-                                 )))
-
-unique(raptors.subset$common_name)
-# Insectivorous Open Country ----------------------------------------------
-
-insect.open <- droplevels(new.spp.list %>%
-                              filter(
-                                  common_name %in% c(
-                                      "Eastern Phoebe",
-                                      "Yellow Rumped Warbler",
-                                      "Common Yellowthroat",
-                                      "White Eyed Vireo",
-                                      "Orange Crowned Warbler",
-                                      "Palm Warbler",
-                                      "Blue-Gray Gnatcatcher"
-                                  )
-                              ))
-
-# Common Open Country -----------------------------------------------------
-comm.open <- droplevels(new.spp.list %>%
-                            filter(
-                                common_name %in% c(
-                                    "Eastern Phoebe",
-                                    "Yellow Rumped Warbler",
-                                    "Common Yellowthroat",
-                                    "White Eyed Vireo",
-                                    "Orange Crowned Warbler",
-                                    "Palm Warbler",
-                                    "Blue Gray Gnatcatcher",
-                                    "Eastern Bluebird",
-                                    "Eastern Towhee",
-                                    "Northern Mockingbird",
-                                    "Brown Thrasher",
-                                    "Swamp Sparrow",
-                                    "Gray Catbird"
-                                )
-                            ))
-unique(comm.open$common_name)
-
-# Common Mixed Flockers without YRWA --------------------------------------
-
-comm.mf <- droplevels(new.spp.list[new.spp.list$common_name %in% c(
-    "Tufted Titmouse",
-    "Yellow Rumped Warbler",
-    "Blue Headed Vireo",
-    "Downy Woodpecker" ,
-    "Carolina Chickadee",
-    "Blue Gray Gnatcatcher",
-    "Ruby Crowned Kinglet",
-    "Orange Crowned Warbler",
-    "Yellow Throated Warbler",
-    "Black and White Warbler"
-),])
-# Common Mixed Flockers without YRWA -----------------------------------
-comm.mf.NOYRWA <-
-    droplevels(new.spp.list[new.spp.list$common_name %in% c(
-        "Tufted Titmouse",
-        "Downy Woodpecker" ,
-        "Carolina Chickadee",
-        "Blue Headed Vireo",
-        "Blue Gray Gnatcatcher",
-        "Ruby Crowned Kinglet",
-        "Orange Crowned Warbler",
-        "Yellow Throated Warbler",
-        "Black and White Warbler"
-    ),])
-
-
-
-# Rare Neotropical Migrant Passerines ----------------------------------
-rare.neo.mig <-
-    new.spp.list %>% filter (
-        common_name %in% c(
-            "American Redstart",
-            "Ash Throated Flycatcher",
-            "Baltimore Oriole",
-            "Black and White Warbler",
-            "Black Throated Blue Warbler",
-            "Black Throated Green Warbler",
-            "Blackburnian Warbler",
-            "Blue Winged Warbler",
-            "Brown Crested Flycatcher",
-            "Bullock'S Oriole",
-            "Eastern Kingbird",
-            "Indigo Bunting",
-            "Least Flycatcher",
-            "Louisiana Waterthrush",
-            "Magnolia Warbler",
-            "Nashville Warbler",
-            "Northern Parula",
-            "Northern Waterthrush",
-            "Orchard Oriole",
-            "Painted Bunting",
-            "Ovenbird",
-            "Prairie Warbler",
-            "Tennessee Warbler",
-            "Yellow Breasted Chat",
-            "Yellow Warbler",
-            "Western Kingbird",
-            "Wilson'S Warbler",
-            "Western Tanager",
-            "Vermilion Flycatcher",
-            "Summer Tanager"
-        )
-    )
-
-
-# Warblers ---------------------------------
-
-warblers.all <-
-    droplevels(new.spp.list %>% filter(family %in% "Parulidae"))
-warblers.all <-
-    rbind(warblers.all, new.spp.list %>% filter (common_name %in% c(
-        "Black and White Warbler", "Wilson'S Warbler"
-    )))
-unique(warblers.all$common_name)
-
-
-# All warblers except YRWA, COYE, PAWA, PIWA ---------------------------
-
-warblers.uncommon <-   droplevels(new.spp.list %>%
-                                      filter(family %in% c("Parulidae") , !(
-                                          common_name %in% c(
-                                              "Common Yellowthroat",
-                                              "Yellow Rumped Warbler",
-                                              "Palm Warbler",
-                                              "Pine Warbler"
-                                          )
-                                      )))
-warblers.uncommon <- rbind(warblers.uncommon,
-                           new.spp.list %>% filter(common_name %in% c(
-                               "Black and White Warbler", "Wilson'S Warbler"
-                           )))
-unique(warblers.uncommon$common_name)
-
-
-# HUmmers -----------------------------------------------------------------
-hummers <-
-    droplevels(new.spp.list %>%
-                   filter(
-                       family %in% c("Trochilidae") |
-                           common_name %in% c("H Bird") |
-                           common_name %in% c("Humm")
-                   ))
-
+# # Common Mixed Flockers without YRWA --------------------------------------
+# comm.mf <- droplevels(new.spp.list[new.spp.list$common_name %in% c(
+#     "Tufted Titmouse",
+#     "Yellow Rumped Warbler",
+#     "Blue Headed Vireo",
+#     "Downy Woodpecker" ,
+#     "Carolina Chickadee",
+#     "Blue Gray Gnatcatcher",
+#     "Ruby Crowned Kinglet",
+#     "Orange Crowned Warbler",
+#     "Yellow Throated Warbler",
+#     "Black and White Warbler"
+# ),])
+# # Common Mixed Flockers without YRWA -----------------------------------
+# comm.mf.NOYRWA <-
+#     droplevels(new.spp.list[new.spp.list$common_name %in% c(
+#         "Tufted Titmouse",
+#         "Downy Woodpecker" ,
+#         "Carolina Chickadee",
+#         "Blue Headed Vireo",
+#         "Blue Gray Gnatcatcher",
+#         "Ruby Crowned Kinglet",
+#         "Orange Crowned Warbler",
+#         "Yellow Throated Warbler",
+#         "Black and White Warbler"
+#     ),])
+#
+#
+#
+# # Rare Neotropical Migrant Passerines ----------------------------------
+# rare.neo.mig <-
+#     new.spp.list %>% filter (
+#         common_name %in% c(
+#             "American Redstart",
+#             "Ash Throated Flycatcher",
+#             "Baltimore Oriole",
+#             "Black and White Warbler",
+#             "Black Throated Blue Warbler",
+#             "Black Throated Green Warbler",
+#             "Blackburnian Warbler",
+#             "Blue Winged Warbler",
+#             "Brown Crested Flycatcher",
+#             "Bullock'S Oriole",
+#             "Eastern Kingbird",
+#             "Indigo Bunting",
+#             "Least Flycatcher",
+#             "Louisiana Waterthrush",
+#             "Magnolia Warbler",
+#             "Nashville Warbler",
+#             "Northern Parula",
+#             "Northern Waterthrush",
+#             "Orchard Oriole",
+#             "Painted Bunting",
+#             "Ovenbird",
+#             "Prairie Warbler",
+#             "Tennessee Warbler",
+#             "Yellow Breasted Chat",
+#             "Yellow Warbler",
+#             "Western Kingbird",
+#             "Wilson'S Warbler",
+#             "Western Tanager",
+#             "Vermilion Flycatcher",
+#             "Summer Tanager"
+#         )
+#     )
+#
+#
+# # Warblers ---------------------------------
+#
+# warblers.all <-
+#     droplevels(new.spp.list %>% filter(family %in% "Parulidae"))
+# warblers.all <-
+#     rbind(warblers.all, new.spp.list %>% filter (common_name %in% c(
+#         "Black and White Warbler", "Wilson'S Warbler"
+#     )))
+# unique(warblers.all$common_name)
+#
+#
+# # All warblers except YRWA, COYE, PAWA, PIWA ---------------------------
+#
+# warblers.uncommon <-   droplevels(new.spp.list %>%
+#                                       filter(family %in% c("Parulidae") , !(
+#                                           common_name %in% c(
+#                                               "Common Yellowthroat",
+#                                               "Yellow Rumped Warbler",
+#                                               "Palm Warbler",
+#                                               "Pine Warbler"
+#                                           )
+#                                       )))
+# warblers.uncommon <- rbind(warblers.uncommon,
+#                            new.spp.list %>% filter(common_name %in% c(
+#                                "Black and White Warbler", "Wilson'S Warbler"
+#                            )))
+# unique(warblers.uncommon$common_name)
+#
+#
+# # HUmmers -----------------------------------------------------------------
+# hummers <-
+#     droplevels(new.spp.list %>%
+#                    filter(
+#                        family %in% c("Trochilidae") |
+#                            common_name %in% c("H Bird") |
+#                            common_name %in% c("Humm")
+#                    ))
+#

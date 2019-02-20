@@ -1,0 +1,512 @@
+year,hours,species,how_many
+2016,278,Black-bellied Whistling-Duck,2510
+2016,278,Muscovy Duck,238
+2016,278,Wood Duck,198
+2016,278,Gadwall,9
+2016,278,American Wigeon,3
+2016,278,Mallard,32
+2016,278,Mottled Duck,1196
+2016,278,Blue-winged Teal,1040
+2016,278,Northern Shoveler,111
+2016,278,Northern Pintail,29
+2016,278,Green-winged Teal,1150
+2016,278,Ring-necked Duck,511
+2016,278,Lesser Scaup,3
+2016,278,Bufflehead,7
+2016,278,Common Goldeneye,1
+2016,278,Hooded Merganser,168
+2016,278,Ruddy Duck,15
+2016,278,Northern Bobwhite,3
+2016,278,Wild Turkey,61
+2016,278,Pied-billed Grebe,112
+2016,278,Rock Pigeon,53
+2016,278,Eurasian Collared Dove,17
+2016,278,Common Ground-Dove,8
+2016,278,Mourning Dove,634
+2016,278,Whip-Poor-Will,4
+2016,278,King Rail,12
+2016,278,Virginia Rail,2
+2016,278,Sora,52
+2016,278,Common Gallinule,352
+2016,278,American Coot,864
+2016,278,Limpkin,52
+2016,278,Sandhill Crane,7965
+2016,278,Killdeer,501
+2016,278,Least Sandpiper,15
+2016,278,Wilson's Snipe,262
+2016,278,American Woodcock,7
+2016,278,Spotted Sandpiper,1
+2016,278,Greater Yellowlegs,68
+2016,278,Lesser Yellowlegs,18
+2016,278,Bonaparte's Gull,7
+2016,278,Laughing Gull,1
+2016,278,Ring-billed Gull,124
+2016,278,Herring Gull,1
+2016,278,Forster's Tern,5
+2016,278,Common Loon,3
+2016,278,Wood Stork,86
+2016,278,Double-crested Cormorant,323
+2016,278,Anhinga,230
+2016,278,American White Pelican,82
+2016,278,American Bittern,9
+2016,278,Great Blue Heron,178
+2016,278,Great Egret,150
+2016,278,Snowy Egret,393
+2016,278,Little Blue Heron,224
+2016,278,Tricolored Heron,41
+2016,278,Cattle Egret,149
+2016,278,Green Heron,7
+2016,278,Black-crowned Night-Heron,25
+2016,278,White Ibis,1394
+2016,278,Glossy Ibis,728
+2016,278,Black Vulture,311
+2016,278,Turkey Vulture,1316
+2016,278,Osprey,1
+2016,278,"Bald Eagle, Adult",43
+2016,278,"Bald Eagle, Immature",16
+2016,278,"Bald Eagle, Unknown",4
+2016,278,Northern Harrier,47
+2016,278,Sharp-shinned Hawk,7
+2016,278,Cooper's Hawk,17
+2016,278,"Accipiter, sp.",5
+2016,278,Red-shouldered Hawk,168
+2016,278,Red-tailed Hawk,37
+2016,278,Barn Owl,5
+2016,278,Eastern Screech-Owl,14
+2016,278,Great Horned Owl,40
+2016,278,Barred Owl,65
+2016,278,Belted Kingfisher,29
+2016,278,Red-headed Woodpecker,29
+2016,278,Red-bellied Woodpecker,316
+2016,278,Yellow-bellied Sapsucker,59
+2016,278,Downy Woodpecker,124
+2016,278,Northern Flicker,109
+2016,278,Pileated Woodpecker,138
+2016,278,American Kestrel,47
+2016,278,Merlin,2
+2016,278,Eastern Phoebe,462
+2016,278,Vermilion Flycatcher,2
+2016,278,Loggerhead Shrike,22
+2016,278,White-eyed Vireo,85
+2016,278,Blue-headed Vireo,60
+2016,278,Blue Jay,212
+2016,278,American Crow,630
+2016,278,Fish Crow,84
+2016,278,"Crow, sp.",64
+2016,278,Tree Swallow,9
+2016,278,Carolina Chickadee,267
+2016,278,Tufted Titmouse,363
+2016,278,Brown-headed Nuthatch,6
+2016,278,House Wren,243
+2016,278,Sedge Wren,101
+2016,278,Marsh Wren,21
+2016,278,Carolina Wren,409
+2016,278,Blue-gray Gnatcatcher,474
+2016,278,Golden-crowned Kinglet,7
+2016,278,Ruby-crowned Kinglet,615
+2016,278,Eastern Bluebird,318
+2016,278,Hermit Thrush,62
+2016,278,American Robin,4853
+2016,278,Gray Catbird,172
+2016,278,Brown Thrasher,18
+2016,278,Northern Mockingbird,127
+2016,278,European Starling,51
+2016,278,Cedar Waxwing,30
+2016,278,House Sparrow,22
+2016,278,American Pipit,79
+2016,278,House Finch,105
+2016,278,American Goldfinch,681
+2016,278,Ovenbird,11
+2016,278,Northern Waterthrush,2
+2016,278,Black-and-White Warbler,97
+2016,278,Orange-crowned Warbler,85
+2016,278,Common Yellowthroat,167
+2016,278,American Redstart,3
+2016,278,Northern Parula,6
+2016,278,Palm Warbler,754
+2016,278,Pine Warbler,119
+2016,278,Yellow-rumped Warbler,1195
+2016,278,Yellow-throated Warbler,41
+2016,278,Prairie Warbler,4
+2016,278,Wilson's Warbler,2
+2016,278,Eastern Towhee,117
+2016,278,Field Sparrow,3
+2016,278,Chipping Sparrow,994
+2016,278,Vesper Sparrow,46
+2016,278,Savannah Sparrow,190
+2016,278,Grasshopper Sparrow,3
+2016,278,Henslow's Sparrow,2
+2016,278,Fox Sparrow,4
+2016,278,Song Sparrow,23
+2016,278,Lincoln's Sparrow,3
+2016,278,Swamp Sparrow,302
+2016,278,White-throated Sparrow,5
+2016,278,White-crowned Sparrow,4
+2016,278,Northern Cardinal,754
+2016,278,Painted Bunting,1
+2016,278,Red-winged Blackbird,9501
+2016,278,Eastern Meadowlark,271
+2016,278,Rusty Blackbird,1
+2016,278,Common Grackle,867
+2016,278,Boat-tailed Grackle,4234
+2016,278,Brown-headed Cowbird,780
+2016,278,Baltimore Oriole,46
+2016,278,Clay-colored sparrow,1
+2016,278,Least Bittern,2
+2016,278,Greater White-fronted Goose,4
+2016,278,Least Flycatcher,1
+2016,278,Stilt Sandpiper,2
+2016,278,Whooping Crane,1
+2016,278,Long-billed Dowitcher,38
+2016,278,Dunlin,1
+2016,278,Peregrine Falcon,2
+2016,278,Nashville Warbler,1
+2016,278,Ash-throated Flycatcher,1
+2016,278,Royal Tern,2
+2016,278,White Winged Dove,3
+2016,278,Vaux's Swift,5
+2016,278,Summer Tanager,1
+2016,278,"Selasphorus, sp.",1
+2016,278,Ruby-throated Hummingbird,1
+2016,278,Common Tern,1
+2016,278,Western Sandpiper,1
+2016,278,Empidonax sp.,1
+2017,293.6,Black-bellied Whistling-Duck,662
+2017,293.6,Snow Goose-White,1
+2017,293.6,Muscovy Duck,252
+2017,293.6,Wood Duck,562
+2017,293.6,Gadwall,120
+2017,293.6,American Wigeon,33
+2017,293.6,Mallard,2
+2017,293.6,Mottled Duck,109
+2017,293.6,Blue-winged Teal,1014
+2017,293.6,Northern Shoveler,106
+2017,293.6,Northern Pintail,9
+2017,293.6,Green-winged Teal,163
+2017,293.6,Ring-necked Duck,1811
+2017,293.6,Lesser Scaup,24
+2017,293.6,Bufflehead,25
+2017,293.6,Hooded Merganser,203
+2017,293.6,Ruddy Duck,3
+2017,293.6,Northern Bobwhite,16
+2017,293.6,Wild Turkey,6
+2017,293.6,Pied-billed Grebe,126
+2017,293.6,Rock Pigeon,59
+2017,293.6,Eurasian Collared Dove,9
+2017,293.6,Mourning Dove,473
+2017,293.6,Whip-Poor-Will,1
+2017,293.6,King Rail,5
+2017,293.6,Virginia Rail,3
+2017,293.6,Sora,54
+2017,293.6,Common Gallinule,991
+2017,293.6,American Coot,5138
+2017,293.6,Limpkin,235
+2017,293.6,Sandhill Crane,6012
+2017,293.6,Killdeer,244
+2017,293.6,Least Sandpiper,42
+2017,293.6,Wilson's Snipe,288
+2017,293.6,American Woodcock,1
+2017,293.6,Spotted Sandpiper,1
+2017,293.6,Greater Yellowlegs,89
+2017,293.6,Lesser Yellowlegs,11
+2017,293.6,Bonaparte's Gull,6
+2017,293.6,Laughing Gull,9
+2017,293.6,Ring-billed Gull,310
+2017,293.6,Herring Gull,5
+2017,293.6,Forster's Tern,12
+2017,293.6,Common Loon,8
+2017,293.6,Wood Stork,44
+2017,293.6,Double-crested Cormorant,679
+2017,293.6,Anhinga,316
+2017,293.6,American White Pelican,7
+2017,293.6,American Bittern,26
+2017,293.6,Great Blue Heron,186
+2017,293.6,Great Egret,375
+2017,293.6,Snowy Egret,197
+2017,293.6,Little Blue Heron,316
+2017,293.6,Tricolored Heron,77
+2017,293.6,Cattle Egret,65
+2017,293.6,Green Heron,35
+2017,293.6,Black-crowned Night-Heron,132
+2017,293.6,White Ibis,1805
+2017,293.6,Glossy Ibis,355
+2017,293.6,Black Vulture,477
+2017,293.6,Turkey Vulture,912
+2017,293.6,Osprey,7
+2017,293.6,Bald Eagle,79
+2017,293.6,Northern Harrier,32
+2017,293.6,Sharp-shinned Hawk,5
+2017,293.6,Cooper's Hawk,11
+2017,293.6,Red-shouldered Hawk,197
+2017,293.6,Red-tailed Hawk,47
+2017,293.6,Barn Owl,1
+2017,293.6,Eastern Screech-Owl,13
+2017,293.6,Great Horned Owl,40
+2017,293.6,Barred Owl,63
+2017,293.6,Belted Kingfisher,83
+2017,293.6,Red-headed Woodpecker,6
+2017,293.6,Red-bellied Woodpecker,384
+2017,293.6,Yellow-bellied Sapsucker,87
+2017,293.6,Downy Woodpecker,174
+2017,293.6,Northern Flicker,94
+2017,293.6,Pileated Woodpecker,173
+2017,293.6,American Kestrel,58
+2017,293.6,Merlin,4
+2017,293.6,Eastern Phoebe,591
+2017,293.6,Loggerhead Shrike,28
+2017,293.6,White-eyed Vireo,117
+2017,293.6,Blue-headed Vireo,131
+2017,293.6,Blue Jay,282
+2017,293.6,American Crow,813
+2017,293.6,Fish Crow,136
+2017,293.6,Tree Swallow,3204
+2017,293.6,Carolina Chickadee,379
+2017,293.6,Tufted Titmouse,423
+2017,293.6,Brown-headed Nuthatch,8
+2017,293.6,House Wren,282
+2017,293.6,Sedge Wren,37
+2017,293.6,Marsh Wren,36
+2017,293.6,Carolina Wren,453
+2017,293.6,Blue-gray Gnatcatcher,858
+2017,293.6,Golden-crowned Kinglet,1
+2017,293.6,Ruby-crowned Kinglet,934
+2017,293.6,Eastern Bluebird,257
+2017,293.6,Hermit Thrush,79
+2017,293.6,American Robin,3088
+2017,293.6,Gray Catbird,150
+2017,293.6,Brown Thrasher,17
+2017,293.6,Northern Mockingbird,147
+2017,293.6,European Starling,23
+2017,293.6,Cedar Waxwing,261
+2017,293.6,House Sparrow,18
+2017,293.6,American Pipit,2
+2017,293.6,House Finch,74
+2017,293.6,American Goldfinch,333
+2017,293.6,Ovenbird,11
+2017,293.6,Northern Waterthrush,4
+2017,293.6,Black-and-White Warbler,138
+2017,293.6,Orange-crowned Warbler,96
+2017,293.6,Common Yellowthroat,204
+2017,293.6,American Redstart,4
+2017,293.6,Northern Parula,3
+2017,293.6,Palm Warbler,1157
+2017,293.6,Pine Warbler,286
+2017,293.6,Yellow-rumped Warbler,1532
+2017,293.6,Yellow-throated Warbler,55
+2017,293.6,Prairie Warbler,6
+2017,293.6,Wilson's Warbler,2
+2017,293.6,Yellow-breasted Chat,1
+2017,293.6,Eastern Towhee,87
+2017,293.6,Field Sparrow,3
+2017,293.6,Chipping Sparrow,712
+2017,293.6,Vesper Sparrow,40
+2017,293.6,Savannah Sparrow,224
+2017,293.6,Grasshopper Sparrow,5
+2017,293.6,Henslow's Sparrow,10
+2017,293.6,Song Sparrow,40
+2017,293.6,Swamp Sparrow,257
+2017,293.6,White-throated Sparrow,5
+2017,293.6,White-crowned Sparrow,1
+2017,293.6,Northern Cardinal,642
+2017,293.6,Painted Bunting,13
+2017,293.6,Red-winged Blackbird,9922
+2017,293.6,Eastern Meadowlark,174
+2017,293.6,Common Grackle,691
+2017,293.6,Boat-tailed Grackle,1502
+2017,293.6,Brown-headed Cowbird,592
+2017,293.6,Baltimore Oriole,49
+2017,293.6,Red-breasted Merganser,3
+2017,293.6,Least Bittern,4
+2017,293.6,Yellow-crowned Night-Heron,1
+2017,293.6,Roseate Spoonbill,2
+2017,293.6,Purple Gallinule,1
+2017,293.6,Long-billed Dowitcher,2
+2017,293.6,Ash-throated Flycatcher,1
+2017,293.6,Vaux's Swift,4
+2017,293.6,Indigo Bunting,4
+2017,293.6,Summer Tanager,3
+2017,293.6,Western Tanager,1
+2017,293.6,Brown Creeper,1
+2017,293.6,Ruby-throated Hummingbird,1
+2018,303.5,Black-bellied Whistling-Duck,1340
+2018,303.5,Snow Goose-White,0
+2018,303.5,Muscovy Duck,228
+2018,303.5,Wood Duck,654
+2018,303.5,Gadwall,17
+2018,303.5,American Wigeon,7
+2018,303.5,Mallard,6
+2018,303.5,Mottled Duck,165
+2018,303.5,Blue-winged Teal,613
+2018,303.5,Northern Shoveler,14
+2018,303.5,Northern Pintail,24
+2018,303.5,Green-winged Teal,596
+2018,303.5,Redhead,2
+2018,303.5,Ring-necked Duck,3431
+2018,303.5,Lesser Scaup,16
+2018,303.5,Bufflehead,48
+2018,303.5,Common Goldeneye,2
+2018,303.5,Hooded Merganser,100
+2018,303.5,Ruddy Duck,113
+2018,303.5,Northern Bobwhite,1
+2018,303.5,Wild Turkey,34
+2018,303.5,Pied-billed Grebe,128
+2018,303.5,Horned Grebe,2
+2018,303.5,Rock Pigeon,23
+2018,303.5,Eurasian Collared Dove,2
+2018,303.5,Common Ground-Dove,3
+2018,303.5,Mourning Dove,224
+2018,303.5,Whip-Poor-Will,4
+2018,303.5,King Rail,7
+2018,303.5,Virginia Rail,6
+2018,303.5,Sora,34
+2018,303.5,Common Gallinule,1318
+2018,303.5,American Coot,3499
+2018,303.5,Limpkin,544
+2018,303.5,Sandhill Crane,3281
+2018,303.5,Killdeer,255
+2018,303.5,Least Sandpiper,23
+2018,303.5,Wilson's Snipe,277
+2018,303.5,American Woodcock,2
+2018,303.5,Spotted Sandpiper,9
+2018,303.5,Greater Yellowlegs,23
+2018,303.5,Lesser Yellowlegs,4
+2018,303.5,Bonaparte's Gull,26
+2018,303.5,Laughing Gull,5
+2018,303.5,Ring-billed Gull,316
+2018,303.5,Herring Gull,2
+2018,303.5,Forster's Tern,2
+2018,303.5,Common Loon,4
+2018,303.5,Wood Stork,120
+2018,303.5,Double-crested Cormorant,857
+2018,303.5,Anhinga,592
+2018,303.5,American White Pelican,62
+2018,303.5,American Bittern,17
+2018,303.5,Great Blue Heron,244
+2018,303.5,Great Egret,309
+2018,303.5,Snowy Egret,475
+2018,303.5,Little Blue Heron,493
+2018,303.5,Tricolored Heron,129
+2018,303.5,Cattle Egret,245
+2018,303.5,Green Heron,48
+2018,303.5,Black-crowned Night-Heron,142
+2018,303.5,White Ibis,2587
+2018,303.5,Glossy Ibis,405
+2018,303.5,Black Vulture,546
+2018,303.5,Turkey Vulture,781
+2018,303.5,Osprey,8
+2018,303.5,"Bald Eagle, Adult",63
+2018,303.5,"Bald Eagle, Immature",30
+2018,303.5,"Bald Eagle, Unknown",7
+2018,303.5,Northern Harrier,38
+2018,303.5,Sharp-shinned Hawk,8
+2018,303.5,Cooper's Hawk,17
+2018,303.5,"Accipiter, sp.",2
+2018,303.5,Red-shouldered Hawk,253
+2018,303.5,Red-tailed Hawk,71
+2018,303.5,Barn Owl,2
+2018,303.5,Eastern Screech-Owl,18
+2018,303.5,Great Horned Owl,31
+2018,303.5,Barred Owl,50
+2018,303.5,Belted Kingfisher,100
+2018,303.5,Red-headed Woodpecker,24
+2018,303.5,Red-bellied Woodpecker,408
+2018,303.5,Yellow-bellied Sapsucker,115
+2018,303.5,Downy Woodpecker,151
+2018,303.5,Northern Flicker,56
+2018,303.5,Pileated Woodpecker,130
+2018,303.5,American Kestrel,52
+2018,303.5,Merlin,4
+2018,303.5,Eastern Phoebe,548
+2018,303.5,Vermilion Flycatcher,1
+2018,303.5,Loggerhead Shrike,23
+2018,303.5,White-eyed Vireo,100
+2018,303.5,Blue-headed Vireo,128
+2018,303.5,Blue Jay,264
+2018,303.5,American Crow,630
+2018,303.5,Fish Crow,158
+2018,303.5,"Crow, sp.",42
+2018,303.5,Tree Swallow,1294
+2018,303.5,Carolina Chickadee,351
+2018,303.5,Tufted Titmouse,450
+2018,303.5,Brown-headed Nuthatch,12
+2018,303.5,House Wren,233
+2018,303.5,Sedge Wren,34
+2018,303.5,Marsh Wren,45
+2018,303.5,Carolina Wren,521
+2018,303.5,Blue-gray Gnatcatcher,723
+2018,303.5,Golden-crowned Kinglet,1
+2018,303.5,Ruby-crowned Kinglet,525
+2018,303.5,Eastern Bluebird,224
+2018,303.5,Hermit Thrush,42
+2018,303.5,American Robin,2396
+2018,303.5,Gray Catbird,256
+2018,303.5,Brown Thrasher,14
+2018,303.5,Northern Mockingbird,122
+2018,303.5,European Starling,30
+2018,303.5,Cedar Waxwing,285
+2018,303.5,House Sparrow,30
+2018,303.5,American Pipit,81
+2018,303.5,House Finch,40
+2018,303.5,American Goldfinch,967
+2018,303.5,Ovenbird,6
+2018,303.5,Northern Waterthrush,7
+2018,303.5,Black-and-White Warbler,121
+2018,303.5,Orange-crowned Warbler,96
+2018,303.5,Common Yellowthroat,259
+2018,303.5,American Redstart,3
+2018,303.5,Northern Parula,5
+2018,303.5,Palm Warbler,1097
+2018,303.5,Pine Warbler,230
+2018,303.5,Yellow-rumped Warbler,1810
+2018,303.5,Yellow-throated Warbler,65
+2018,303.5,Prairie Warbler,6
+2018,303.5,Wilson's Warbler,0
+2018,303.5,Yellow-breasted Chat,3
+2018,303.5,Eastern Towhee,66
+2018,303.5,Field Sparrow,4
+2018,303.5,Chipping Sparrow,1173
+2018,303.5,Vesper Sparrow,31
+2018,303.5,Savannah Sparrow,138
+2018,303.5,Grasshopper Sparrow,20
+2018,303.5,Henslow's Sparrow,4
+2018,303.5,Fox Sparrow,2
+2018,303.5,Song Sparrow,64
+2018,303.5,Lincoln's Sparrow,1
+2018,303.5,Swamp Sparrow,266
+2018,303.5,White-throated Sparrow,21
+2018,303.5,White-crowned Sparrow,6
+2018,303.5,Northern Cardinal,743
+2018,303.5,Painted Bunting,12
+2018,303.5,Red-winged Blackbird,7266
+2018,303.5,Eastern Meadowlark,155
+2018,303.5,Rusty Blackbird,5
+2018,303.5,Common Grackle,677
+2018,303.5,Boat-tailed Grackle,2177
+2018,303.5,Brown-headed Cowbird,759
+2018,303.5,Baltimore Oriole,24
+2018,303.5,Indigo Bunting,2
+2018,303.5,Snail Kite,29
+2018,303.5,Clay-colored sparrow,2
+2018,303.5,Purple Finch,1
+2018,303.5,Pine Siskin,7
+2018,303.5,Purple Gallinule,10
+2018,303.5,Peregrine Falcon,1
+2018,303.5,Least Flycatcher,1
+2018,303.5,Bachman's Sparrow,1
+2018,303.5,Ash-throated Flycatcher,2
+2018,303.5,Ruby-throated Hummingbird,1
+2018,303.5,Red-breasted Nuthatch,1
+2018,303.5,Rose-breasted Grosbeak,1
+2018,303.5,Whooping Crane,2
+2018,303.5,Black-thoated Green Warbler,1
+2018,303.5,Summer Tanager,3
+2018,303.5,Least Bittern,11
+2018,303.5,Tennessee Warbler,1
+2018,303.5,White Winged Dove,2
+2018,303.5,Egyptian Goose,1
+2018,303.5,Vaux's Swift,5
+2018,303.5,Canvasback,1
+2018,303.5,Chuck-will's-Widow,1
+2018,303.5,Nashville Warbler,1
+2018,303.5,Dunlin,10
+2018,303.5,Long-billed Dowitcher,3

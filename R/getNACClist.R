@@ -1,8 +1,8 @@
 #' @title Load NACC species list to allow for quick filtering of CBC species
 #' @param naccURL URL location of the NACC speices checklist.
-#' @export
+#' @export getNACC
 
-getNACClist <- function(naccURL = "http://checklist.aou.org/taxa.csv?type=charset%3Dutf-8%3Bsubspecies%3Dno%3B",
+getNACC <- function(naccURL = "http://checklist.aou.org/taxa.csv?type=charset%3Dutf-8%3Bsubspecies%3Dno%3B",
                         remove.hypen = F){
 
 nacc.list <- read.csv(url(naccURL))
@@ -18,6 +18,12 @@ nacc.list$common_name <- gsub("Rock Pigeon", "Rock Dove", nacc.list$common_name)
 # Force to title case
 nacc.list$common_name <-
     str_to_title(nacc.list$common_name)
+
+nacc.list <- nacc.list %>%
+    # keep only relevant columns
+    dplyr::select(common_name, species, family, order, id, avibase.id) %>%
+    # rename to match cbc data
+    rename(key = common_name)
 
 return(nacc.list)
 

@@ -8,12 +8,17 @@ output: pdf_document
 ```{r libs, include=F}
 # Install packages as necessary
 list.of.packages <- c(
-    "stringr","ggplot2",  "here", "dplyr", "knitr", "tidyr", "reshape2", "readr")
+    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
 # Load pkgs
 lapply(list.of.packages, require, character.only = TRUE)
+
+
+# Install git packages 
+devtools::install_github("trashbirdecology/flgaCBC", force = F)
+library(flgaCBC)
 ```
 
 ```{r setup, include=FALSE}
@@ -23,49 +28,102 @@ knitr::opts_chunk$set( include = F, fig.cap = "...")
 dataDir <- paste0(here::here(), "/data/")
 ```
 
+```{r ggSetup, include=FALSE}
+## Define custom ggthemes
+theme_Publication <- function(base_size=14, base_family="helvetica") {
+      library(grid)
+      library(ggthemes)
+      (theme_foundation(base_size=base_size, base_family=base_family)
+       + theme(plot.title = element_text(face = "bold",
+                                         size = rel(1.2), hjust = 0.5),
+               text = element_text(),
+               panel.background = element_rect(colour = NA),
+               plot.background = element_rect(colour = NA),
+               panel.border = element_rect(colour = NA),
+               axis.title = element_text(face = "bold",size = rel(1)),
+               axis.title.y = element_text(angle=90,vjust =2),
+               axis.title.x = element_text(vjust = -0.2),
+               axis.text = element_text(), 
+               axis.line = element_line(colour="black"),
+               axis.ticks = element_line(),
+               panel.grid.major = element_line(colour="#f0f0f0"),
+               panel.grid.minor = element_blank(),
+               legend.key = element_rect(colour = NA),
+               legend.position = "bottom",
+               legend.direction = "horizontal",
+               legend.key.size= unit(0.2, "cm"),
+               legend.margin = unit(0, "cm"),
+               legend.title = element_text(face="italic"),
+               plot.margin=unit(c(10,5,5,5),"mm"),
+               strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
+               strip.text = element_text(face="bold")
+          ))
+     
+}
+scale_fill_Publication <- function(...){
+      library(scales)
+      discrete_scale("fill","Publication",manual_pal(values = c("#386cb0","#fdb462","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)}
+scale_colour_Publication <- function(...){
+      library(scales)
+      discrete_scale("colour","Publication",manual_pal(values = c("#386cb0","#fdb462","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)
+
+}
+```
 ## Import and munge Christmas Bird Count data & NACC species list
 ```{r importMungeData}
-# Load CBC data
-birds <-
+# Load CBC data (YYYY - 2015)
+birds_1957to2015 <-
   read.csv(paste0(dataDir,"CBC_flga_1957to2015.csv"), stringsAsFactors = FALSE, check.names = F) %>% 
     gather(key = "key", value = "value", -(1:4), factor_key =T) %>% 
     filter(!value %in% c("CW", "cw")) %>% 
     mutate(value = as.integer(value))
 
+# Load recent data (2016-2018)
+birds2016_2018 <-  read.csv(paste0(dataDir,"CBC_flga_2016to2018_long.csv"), stringsAsFactors = FALSE, check.names = F) %>% 
+    rename( key = species, 
+            value = how_many)
 
-# Fix Snow Goose counts (there are two counts, Blue and White vars). need to add them and recast DF.
-birds$key <- gsub("Snow Goose-White","Snow Goose" , birds$key)
-birds$key <- gsub("Snow Goose-Blue", "Snow Goose" , birds$key)
-
-# Recast the data and add up snow geese counts
-birds <-  birds %>% 
-                group_by(year, key) %>% 
-                mutate(value =  sum(as.integer(value))) %>% 
-                distinct() %>% 
-                spread( key, value)
-
-# munge the species names of data to match NACC common names
-names(birds) <- editNames(birds)
-
+# Merge orig data sets
+birds <- full_join(birds_1957to2015, birds2016_2018) %>% 
+    editNames() 
 
 # Get NACC checklist (aou)
-if(!exists("nacc")){nacc <- getNACClist(remove.hypen = F)}
+if(!exists("nacc")){nacc <- getNACC(remove.hypen = F)}
 
 
 # See which species are in birds but not in nacc.list
-setdiff(names(birds), nacc.list$common_name) %>% sort()
+(missingSpp<-setdiff(unique(birds$key), nacc$key) %>% sort())
   ## If there are issues, I recommend fixing them in the function editNames.R, or just do it in this chunk..
+        # Un resolved issues, if necessary
+        # NACC does not contain the following species that occur in CBC data:
+            # Gray-headed swamphen (Porphyrio poliocephalus)
 
-## Un resolved issues, if necessary
-# NACC does not contain the following species that occur in CBC data:
-    # Gray-headed swamphen (Porphyrio poliocephalus)
+# join NACC list with our CBC data
+birds <- left_join(birds, nacc) 
 
+# Get total species count (excludes groups (like Sp., or UNID))
+birds <- estRichness(birds, missingSpp, ignore = missingSpp[c(9)] ) %>% 
+    right_join(birds)
+
+# Clear some temp objects
+rm(nacc, birds_1957to2015, birds2016_2018)
 ```
-
-```{r visualizeEffort}
-
+## Visualize CBC effort over time
 
 
+```{r visualizeEffort, fig.cap= "Annual effort and species richness for the FLGA CBC circle."}
+hours.p <- ggplot(data = birds)+
+    geom_line(aes(year, hours))+
+    xlim(c(min(birds$year), max(birds$year)))+
+    theme_pubclean()+
+    ylab("hours effort")
 
-         
+rich.p <- ggplot(data = birds %>% distinct(year, rich))+
+    geom_line(aes(year, rich))+
+    xlim(c(min(birds$year), max(birds$year)))+
+    theme_pubclean() + 
+    ylab("# species")
+
+gridExtra::grid.arrange(rich.p, hours.p)
+
 ```

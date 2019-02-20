@@ -1,59 +1,82 @@
 #' @title Fix species names on CBC list to correspond with NACC species list
-#' @param df A data frame with header that includes all species (common names).
-#' @export
+#' @param df A data frame with header that includes variable key (== species common names).
+#' @param return.wide Logical. If TRUE returns a wide data frame. Default = FALSE (long df).
+#' @export editNames
+#'
+#'
+editNames <- function(df, return.wide = FALSE){
 
-editNames <- function(df){
+df <-     df %>%
+    mutate(key = str_to_title(key)) %>%
+    # Fix some species names here, do not ove to edit names, because we will have to sum these while data is in long    format (see next call.)
+    mutate(key = gsub(", sp.", " Sp." , key, fixed = T)) %>%
+    mutate(key = gsub(", Sp.", " Sp." , key, fixed = T)) %>%
+    mutate(key = gsub(" sp.", " Sp." , key, fixed = T)) %>%
+        mutate(key = gsub("Bald Eagle, Adult", "Bald Eagle" , key, fixed = T)) %>%
+        mutate(key = gsub("Bald Eagle, Immature", "Bald Eagle" , key, fixed = T)) %>%
+        mutate(key = gsub("Bald Eagle Imm.", "Bald Eagle" , key, fixed = T)) %>%
+        mutate(key = gsub("Bald Eagle, Unknown", "Bald Eagle" , key, fixed = T)) %>%
+        mutate(key = gsub("Bald Eagle Unk.", "Bald Eagle" , key, fixed = T)) %>%
+        mutate(key = gsub("Bald Eagle, Adult", "Bald Eagle" , key, fixed = T)) %>%
+        mutate(key = gsub("Bald Eagle Ad.", "Bald Eagle" , key, fixed = T)) %>%
+        mutate(key = gsub("Dbl-Cr Cormorant", "Double-Crested Cormorant" , key, fixed = T)) %>%
+        mutate(key = gsub("Mallard-Wild", "Mallard" , key, fixed = T)) %>%
+        mutate(key = gsub("Mallard-Feral", "Mallard" , key, fixed = T)) %>%
+        mutate(key = gsub("Rock Pigeon", "Rock Dove" , key, fixed = T)) %>%
+        mutate(key = gsub("Snow Goose-White", "Snow Goose" , key, fixed = T)) %>%
+        mutate(key = gsub("Snow Goose-Blue", "Snow Goose" , key, fixed = T)) %>%
 
-# Let's work with the column names
-edit.names <- names(df)
+    mutate(key = gsub( "Black\\&", "Black-And-" , key, fixed = T)) %>%
+    mutate(key = gsub( "Black&", "Black-And-" , key, fixed = T)) %>%
 
-# Force to title case
-edit.names <- str_to_title(edit.names)
+#  mutate(key =gsub( "Black\\&", "Black-And-", key,  fixed = T)) %>%
+ mutate(key =gsub( "Black-Neccked Stilt", "Black-Necked Stilt", key,  fixed = T)) %>%
+ mutate(key =gsub( "Brstd", "Breasted", key,  fixed = T)) %>%
+ mutate(key =gsub( "Brown Crested", "Brown-Crested", key,  fixed = T)) %>%
 
-# Trim whitespace
-edit.names <- trimws(edit.names, which = "left")
-edit.names <- trimws(edit.names, which = "right")
-
-edit.names <- gsub("Bald Eagle Ad.", "Bald Eagle", edit.names)
-edit.names <- gsub("Bald Eagle Imm.", "Bald Eagle", edit.names)
-edit.names <- gsub("Bald Eagle Unk.", "Bald Eagle", edit.names)
-
-edit.names <- gsub("Black\\&", "Black-And-", edit.names)
-edit.names <- gsub("Black-Neccked Stilt", "Black-Necked Stilt", edit.names)
-edit.names <- gsub("Brstd", "Breasted", edit.names)
-edit.names <- gsub("Brown Crested", "Brown-Crested", edit.names, fixed =T)
-
-edit.names <- gsub("Easterntowhee", "Eastern Towhee", edit.names)
-edit.names <- gsub("Eur. Starling", "European Starling", edit.names, fixed=T)
-edit.names <- gsub("Eur. Collared Dove", "Eurasian Collared-Dove", edit.names, fixed=T)
+ mutate(key =gsub( "Easterntowhee", "Eastern Towhee", key,  fixed = T)) %>%
+ mutate(key =gsub( "Eur. Starling", "European Starling", key,  fixed = T)) %>%
+ mutate(key =gsub( "Eur. Collared Dove", "Eurasian Collared-Dove", key,  fixed = T)) %>%
+ mutate(key =gsub( "Eurasian Collared Dove", "Eurasian Collared-Dove", key,  fixed = T)) %>%
 
 
-edit.names <- gsub("Dbl-Cr Crested Cormorant", "Double-Crested Cormorant", edit.names, fixed=T)
-edit.names <- gsub("Double Crested Cormorant", "Double-Crested Cormorant", edit.names)
+ mutate(key =gsub( "Dbl-Cr Cormorant", "Double-Crested Cormorant", key,  fixed = T)) %>%
+ mutate(key =gsub( "Double Crested Cormorant", "Double-Crested Cormorant", key,  fixed = T)) %>%
 
-edit.names <- gsub("Harris", "Harris's", edit.names, fixed =T)
-edit.names <- gsub("H'bird", "Hummingbird", edit.names, fixed =T)
+ mutate(key =gsub( "Harris", "Harris's", key,  fixed = T)) %>%
+ mutate(key =gsub( "H'bird", "Hummingbird", key,  fixed = T)) %>%
 
-edit.names <- gsub("Le Conte's", "Leconte's", edit.names, fixed =T)
+ mutate(key =gsub( "Le Conte's", "Leconte's", key,  fixed = T)) %>%
 
-edit.names <- gsub("Mallard-Wild", "Mallard", edit.names)
-edit.names <- gsub("N. Rough", "Northern Rough", edit.names, fixed =T)
+ mutate(key =gsub( "Mallard-Wild", "Mallard", key,  fixed = T)) %>%
+ mutate(key =gsub( "N. Rough", "Northern Rough", key,  fixed = T)) %>%
 
-edit.names <- gsub("Red's", "Red S", edit.names)
+ mutate(key =gsub( "Red's", "Red S", key,  fixed = T)) %>%
 
-edit.names <- gsub("Selasphorus Sp.", "Hummingbird Sp.", edit.names)
-edit.names <- gsub("Sharp'shinned Hawk", "Sharp-Shinned Hawk", edit.names)
+ mutate(key =gsub( "Selasphorus Sp.", "Hummingbird Sp.", key,  fixed = T)) %>%
+ mutate(key =gsub( "Sharp'shinned Hawk", "Sharp-Shinned Hawk", key,  fixed = T)) %>%
 
-edit.names <- gsub("Thoated", "Throated", edit.names)
+ mutate(key =gsub( "Thoated", "Throated", key,  fixed = T)) %>%
 
-edit.names <- gsub("Whip-Poor-Will", "Eastern Whip-Poor-Will", edit.names, fixed =T)
-edit.names <- gsub("Woodp.", "Woodpecker", edit.names, fixed =T)
+ mutate(key =gsub( "Whip-Poor-Will", "Eastern Whip-Poor-Will", key,  fixed = T)) %>%
+ mutate(key =gsub( "Woodp.", "Woodpecker", key,  fixed = T)) %>%
+ mutate(key =gsub( "White Winged Dove", "White-Winged Dove", key,  fixed = T)) %>%
+ mutate(key =gsub( "Whstling", "Whistling", key,  fixed = T))
 
-#@ NOT WORKING FOR SOME REASONs
-edit.names <- gsub("Whstling", "Whistling", edit.names)
+
+# Add the species counts
+# Recast the data and add up snow geese counts
+df <-df %>%   group_by(year, key) %>%
+    mutate(value =  sum(as.integer(value))) %>%
+    distinct(year, key, value, .keep_all = T)
+
+if(return.wide){
+    df <- df %>%
+        spread( key, value, fill=0)
+}
 
 
 # Return new names
-return(edit.names)
+return(df)
 
 }
