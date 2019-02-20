@@ -6,7 +6,7 @@ The package companion to a manuscript in prepartion by myself, Scott K. Robinson
 
 Preparing a manuscript for publication in *Florida Field Naturalist*. 
 
-Looking at bird population trends using the Christmas Bird Count in Gainesville, FL. 
+Looking at bird population trends using the Christmas Bird Count in Gainesville, FL (circle code: FLGA) as an example of potential regional and large-scale impacts of urbanization and climate change on bird groups. 
 
 
 
