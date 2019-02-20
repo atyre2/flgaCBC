@@ -12,4 +12,5 @@ Looking at bird population trends using the Christmas Bird Count in Gainesville,
 
 ## Installing
 devtools::install_github("trashbirdecology/flgaCBC", force = F)
+
 library(flgaCBC)
