@@ -13,7 +13,7 @@ output: pdf_document
 ```{r libs, include=F}
 # Install packages as necessary
 list.of.packages <- c(
-    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools", "kableExtra", "stargazer")
+    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools", "kableExtra", "stargazer", "nlme")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
@@ -161,86 +161,33 @@ birds.new.wide %>%
 
 
 # Statistical analysis of population trends
-
-We estimated species population trends in the Gainesville, Florida Christmas Bird Count (CBC; National Audubon Society REF) circle (FLGA) for the period of `r startYear` to 2015 using generalized additive models (GAMs, Hastie and Tibshirani 1990; Wood 2006). GAMs are a flexible implementation of generalized linear models in cases where species’ populations exhibit non-linear trends. GAMs optimize the predictability of the relationship between the response and predictor variable(s) while accounting for the noise associated with.  We analyzed individual species’ trends using the a generalized additive model: 
+## Model structure
+We estimated species population trends in the Gainesville, Florida Christmas Bird Count (CBC; National Audubon Society REF) circle (FLGA) for the period of `r startYear` to 2015 using generalized additive models (GAMs, Hastie and Tibshirani 1990; Wood 2006). GAMs are a flexible implementation of generalized linear models in cases where species’ populations exhibit non-linear trends. GAMs optimize the predictability of the relationship between the response and predictor variable(s) while accounting for the noise associated with year-to-year fluctuations in species counts.  We analyzed individual species’ trends using the a generalized additive model: 
 
 \begin{equation} 
-y = \alpha + s(year) + s(hours) \\
-\gamma = 1  \\
-(\#eq:var-beta)
+g(E(y_i)) = \beta_0 _ f(year_i) + \epsilon_i, \\
+y_i ~ some exp. distribution
 \end{equation} 
 
+- Most species trends were non-linear over the study period. GAM optimizes the residuals by fitting knots in the model (count, response value), so if the trend is linear, it will fit it.
+- ARound 1980 the hours effort and number of participants increased linearally, therefore we did not fit a smooth to the hours effort (see \@ref(fig:effortPlots)). 
+- We controlled for temporal autocorrelation by taking first, second, adn third differences (AR1, AR2, and AR3). We chose the best fitting model for each species by running likelihood ratios
+
+## Analysis results
 ```{r runGroupGams}
 # Add groups to the bird data 
 birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family))
 
-if(is.factor(birds.grouped$ind)){
-    index <- levels(birds.grouped$ind)}else(index <- unique(birds.grouped))
-groupGams <- list()
-for (i in 1:index) {
-    gam.data <- birds.grouped %>% 
-        # keep species grouping i
-        # filter(ind == index[i], 
-        #        year > startYear)  # %>%
-        group_by(year) %>%
-        mutate(value = sum(value)) %>%
-        distinct(year, hours,value )
-    #     
-    groupGams[[i]] =
-        gamm(
-            value ~ s(year) + hours,
-            method = "REML",
-            data = gam.data
-        )
-    
-            # Beacuse time series are usually autocorrelated, the standard errors may be deflated. Let's look at ACF
-            ## look at autocorrelation in residuals:
-        acf(resid(groupGams[[i]]$lme, type = "normalized"))
-        ## ...wait... look at the plot, only then do...
-        pacf(resid(groupGams.AR1[[i]] $lme, type = "normalized"))
+# Run the gams in all the groups (saves figs to file and exports a list of results)
+gams.grouped <- runGams(birds.grouped, group.var = "ind", year.start = 1973)
 
-## AR models    
-ar1.gam =
-                gamm(
-                    value ~ s(year) + hours,
-                    method = "REML",
-                    data = gam.data,
-                    correlation = corARMA(form = ~ year, p = 1)
-                )
-  
-ar2.gam  =
-                gamm(
-                    value ~ s(year) + hours,
-                    method = "REML",
-                    data = gam.data,
-                    correlation = corARMA(form = ~ year, p = 2)
-                )
-ar3.gam =
-                gamm(
-                    value ~ s(year) + hours,
-                    method = "REML",
-                    data = gam.data,
-                    correlation = corARMA(form = ~ year, p = 3)
-                )
-
-## ...wait... look at the plot, only then do...
-pacf(resid(ar1.gam$lme, type = "normalized"))
-pacf(resid(ar2.gam$lme, type = "normalized"))
-pacf(resid(ar3.gam$lme, type = "normalized"))
-
-aov.tab = anova(ar1.gam$lme, ar2.gam$lme, ar3.gam$lme)
-      
-# Keep the best fitting model
-mod.keep = aov.tab %>% 
-    slice(which.min(`p-value`)) %>% 
-    mutate(modelName = paste0("ar", Model, ".gam")) %>% 
-    select(modelName, df, AIC, BIC, logLik, L.Ratio, "p-value")
+# Run the gams in all the species (saves figs to file and exports a list of results)
+gams.species <- runGams(birds.grouped %>% filter(key !="Mallard"), group.var = "key", year.start = 1973)
 
 
-
-    }
-
-names(groupGams) <- index
+# Unlist the list of lists
+best.mod.LRresults <- ???(gamResults.list$LRresults)
+best.gam.results <- ??(gamResults.list$bestGamModelResults)
 
 ```
 
