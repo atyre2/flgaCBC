@@ -17,27 +17,27 @@ neotropMig.spp <- c(
     # "Black&White Warbler",   # just in case
     "Black-Headed Grosbeak",
     "Black-Throated Blue Warbler",
-    # "Black-Throated Green Warbler",
-    # "Blackburnian Warbler",
-    # "Blue Winged Warbler",
-    # "Brown Crested Flycatcher",
-    # "Bullock'S Oriole",
+    "Black-Throated Green Warbler",
+    "Blackburnian Warbler",
+    "Blue Winged Warbler",
+    "Brown Crested Flycatcher",
+    "Bullock'S Oriole",
     "Cape May Warbler",
     "Chestnut-Sided Warbler",
     "Dickcissel",
-    # "Eastern Kingbird",
+    "Eastern Kingbird",
     "Eastern Whip-Poor-Will",
     "Great-Crested Flycatcher",
     "Hooded Warbler",
     "Indigo Bunting",
     "Kentucky Warbler",
-    # "Least Flycatcher",
+    "Least Flycatcher",
     "Louisiana Waterthrush",
     "Magnolia Warbler",
     "Nashville Warbler",
     "Northern Parula",
     "Northern Waterthrush",
-    # "Orchard Oriole",
+    "Orchard Oriole",
     "Ovenbird",
     "Painted Bunting",
     "Prairie Warbler",
@@ -45,11 +45,10 @@ neotropMig.spp <- c(
     "Ruby-Throated Hummingbird",
     "Rufous Hummingbird",
     "Summer Tanager",
-    # "Tennessee Warbler",
-    # "Tree Swallow",
+    "Tennessee Warbler",
     "Yellow Breasted Chat",
-    # "Yellow Warbler",
-    # "Western Kingbird",
+    "Yellow Warbler",
+    "Western Kingbird",
     "Western Tanager",
     "Wilson's Warbler",
     "Vaux's Swift",
@@ -101,7 +100,7 @@ wideDecline.spp <- c(
     "Grasshopper Sparrow",
     "Henslow's Sparrow",
     "Loggerhead Shrike",
-    # NOFL what is this?
+    "Northern Flicker",
     "Northern Bobwhite",
     "Red-Headed Woodpecker"
 )
@@ -109,12 +108,13 @@ wideDecline.spp <- c(
 # 5. Non-native species
 nn.spp <-c(
     "Black-Bellied Whistling-Duck",
+    "Egyptian Goose",
     "European Starling",
     "Eurasian Collared-Dove",
     "House Sparrow",
     "Mallard",
     "Mallard-Feral",
-    # MUDU what is this?
+    "Mourning Dove",
     "Rock Dove"
 
 )
@@ -157,6 +157,7 @@ noflWinter.spp <- c(
 "Swamp Sparrow",
 "Tufted Titmouse",
 "White-Eyed Vireo",
+"Wilson's Snipe",
 "Yellow-Bellied Sapsucker",
 "Yellow-Rumped Warbler",
 "Yellow-Throated Warbler"
@@ -223,6 +224,7 @@ urban.spp <- c(
     "Canada Goose",
     "Carolina Chickadee",
     "Carolina Wren",
+"Common Gallinule",
 # "Chipping Sparrow", # not really urban but yes to feeder
 # "Common Ground-Dove", # Andy says no
     "Eastern Screech-Owl",
@@ -271,6 +273,7 @@ agLoss.spp <-c(
     # "Segde Wren", # AK says no
     "Red-Winged Blackbird",
 "Red-Tailed Hawk",
+"Savannah Sparrow",
     "Vesper Sparrow"
 
 )
