@@ -27,3 +27,5 @@ vignettes/*.pdf
 
 
 /packrat
+runThrough.pdf
+runThrough.Rmd
