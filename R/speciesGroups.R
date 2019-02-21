@@ -316,8 +316,7 @@ sppList <- list(
     feeder.spp)
 
 names(sppList) <-
-    c(
-      "Neotropical migrants",
+    c("Neotropical migrants",
       "Short-distance migrants",
       "Locally endemic",
       "Widespread declining",

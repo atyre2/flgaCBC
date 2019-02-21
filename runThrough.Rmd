@@ -21,7 +21,7 @@ if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages, require, character.only = TRUE)
 
 # Install git packages 
-devtools::install_github("trashbirdecology/flgaCBC", force = F)
+devtools::install_github("trashbirdecology/flgaCBC", force = T)
 library(flgaCBC)
 ```
 
@@ -101,11 +101,13 @@ The count format (broken up into 11 teams and all day counts) was instituted in 
 
 
 ## Species groups
-```{r sppGroupTab}
+```{r sppGroupTab, include = T, echo=F}
 # Get species groupings
 sppGroups <- speciesGroups() 
-
-sppGroups <- stack(setNames(sppGroups, names(sppGroups)))  %>% 
+# Make a data frame from output 
+sppGroups <- stack(setNames(sppGroups, names(sppGroups)))
+# Mugne for table
+sppGroups <- sppGroups %>% 
     distinct(values, ind) %>%
     rename(species = values, 
            sppGroup = ind) %>% 
