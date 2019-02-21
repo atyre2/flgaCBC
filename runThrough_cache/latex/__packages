@@ -1,0 +1,13 @@
+base
+stringr
+ggplot2
+here
+knitr
+tidyr
+reshape2
+readr
+dplyr
+devtools
+usethis
+ggthemes
+flgaCBC

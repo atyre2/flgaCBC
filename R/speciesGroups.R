@@ -13,8 +13,8 @@ neotropMig.spp <- c(
     "Baltimore Oriole",
     "Black-Chinned Hummingbird",
     "Black-And-White Warbler",
-    "Black & White Warbler", # just in case
-    "Black&White Warbler",   # just in case
+    # "Black & White Warbler", # just in case
+    # "Black&White Warbler",   # just in case
     "Black-Headed Grosbeak",
     "Black-Throated Blue Warbler",
     # "Black-Throated Green Warbler",
@@ -77,6 +77,7 @@ shortDistMig.spp <- c(
     "Rusty Blackbird",
     "Sandhill Crane",
     "Song Sparrow",
+    "Sharp-Shinned Hawk",
     "Vesper Sparrow",
     "White-Throated Sparrow",
     "Winter Wren",
@@ -124,8 +125,8 @@ noflWinter.spp <- c(
 "American Goldfinch",
 "American Robin",
     "Black-And-White-Warbler",
-    "Black & White-Warbler", # just in case
-    "Black&White-Warbler",
+    # "Black & White-Warbler", # just in case
+    # "Black&White-Warbler",
     "Blue-Gray Gnatcatcher",
     "Blue-Headed Vireo",
 "Brown-Headed Cowbird",
@@ -213,6 +214,7 @@ urban.spp <- c(
     "American Crow",
     "Barn Owl",
     "Blue Jay",
+    "Black-Bellied Whistling-Duck",
     "Black Vulture",
 "Boat-Tailed Grackle",
 "Brown-Headed Cowbird",
@@ -221,10 +223,10 @@ urban.spp <- c(
     "Canada Goose",
     "Carolina Chickadee",
     "Carolina Wren",
-"Chipping Sparrow",
-"Common Ground-Dove",
+# "Chipping Sparrow", # not really urban but yes to feeder
+# "Common Ground-Dove", # Andy says no
     "Eastern Screech-Owl",
-"Eastern Towhee",
+# "Eastern Towhee", # Andy says no
     "Fish Crow",
 "Great-Horned Owl",
     "Hooded Merganser",
@@ -239,10 +241,12 @@ urban.spp <- c(
     "Ring-Billed Gull",
 "Tufted Titmouse",
     "Turkey Vulture",
-    "Wood Duck"
+"White Ibis",
+"Wood Duck"
 )
 
 
+# 10. Agricultural changes
 agLoss.spp <-c(
     "American Pipit",
     "American Kestrel",
@@ -251,34 +255,39 @@ agLoss.spp <-c(
     "Brown Thrasher",
     "Common Ground-Dove",
     "Common Grackle",
+    "Eastern Bluebird",
     "Eastern Meadowlark",
+    "Eastern Phoebe",
     "House Sparrow",
-    "Grasshopper Sparrow",
-    "Henslow's Sparrow",
+    # "Grasshopper Sparrow", #AK says no
+    # "Henslow's Sparrow",  #AK says no
     "Field Sparrow",
     "Northern Mockingbird",
     "Killdeer",
     "Loggerhead Shrike",
     "Mourning Dove",
-    "Segde Wren",
+    # "Palm Warbler", # maybe
+    "Northern Harrier",
+    # "Segde Wren", # AK says no
+    "Red-Winged Blackbird",
 "Red-Tailed Hawk",
     "Vesper Sparrow"
 
 )
 
-
+# 11. Feeder species
 feeder.spp <-c(
     "American Goldfinch",
     "American Crow",
     "Baltimore Oriole",
     "Brown-Headed Cowbird",
     "Blue Jay",
-
     "Carolina Chickadee",
     "Carolina Wren",
     "Chipping Sparrow",
     "Cooper's Hawk",
     "House Finch",
+    "House Sparrow",
     "Indigo Bunting",
     "Northern Cardinal",
     "Mourning Dove",
@@ -291,6 +300,37 @@ feeder.spp <-c(
     "Sharp-Shinned Hawk",
     "Tufted Titmouse"
 )
+
+
+sppList <- list(
+    neotropMig.spp,
+    shortDistMig.spp,
+    regionEndem.spp,
+    wideDecline.spp,
+    nn.spp,
+    noflWinter.spp,
+    ddt.spp,
+    sweetwater.spp,
+    urban.spp,
+    agLoss.spp,
+    feeder.spp)
+
+names(sppList) <-
+    c(
+      "Neotropical migrants",
+      "Short-distance migrants",
+      "Locally endemic",
+      "Widespread declining",
+      "Non-native",
+      "N. FL wintering center",
+      "DDT-vics",
+      "Sweetwater",
+      "Urban adapters",
+      "Ag-loss vics",
+      "Feeder birds"
+      )
+
+return(sppList)
 
 
 }

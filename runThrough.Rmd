@@ -4,17 +4,21 @@ author: "Burnett, JL"
 date: "February 20, 2019"
 output: pdf_document
 ---
+```{r JESSICANOTES, eval=F}
+## SPECIES TO INCLUDE
+# You can count hummingbird sp, Archilochus sp., waterthrush sp., Empidonax sp. as Neotropical migrants,   Crow sp. as urban adapters, accipiter sp. as feeder adapters. I'd say ignore the rest.   
+
+```
 
 ```{r libs, include=F}
 # Install packages as necessary
 list.of.packages <- c(
-    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools")
+    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools", "kableExtra")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
 # Load pkgs
 lapply(list.of.packages, require, character.only = TRUE)
-
 
 # Install git packages 
 devtools::install_github("trashbirdecology/flgaCBC", force = F)
@@ -23,54 +27,13 @@ library(flgaCBC)
 
 ```{r setup, include=FALSE}
 # Set default chunk options
-knitr::opts_chunk$set( include = F, fig.cap = "...")
+knitr::opts_chunk$set( include = F, fig.cap = "...", cache = T)
 # Define directories and create as necessary
 dataDir <- paste0(here::here(), "/data/")
 ```
 
-```{r ggSetup, include=FALSE}
-## Define custom ggthemes
-theme_Publication <- function(base_size=14, base_family="helvetica") {
-      library(grid)
-      library(ggthemes)
-      (theme_foundation(base_size=base_size, base_family=base_family)
-       + theme(plot.title = element_text(face = "bold",
-                                         size = rel(1.2), hjust = 0.5),
-               text = element_text(),
-               panel.background = element_rect(colour = NA),
-               plot.background = element_rect(colour = NA),
-               panel.border = element_rect(colour = NA),
-               axis.title = element_text(face = "bold",size = rel(1)),
-               axis.title.y = element_text(angle=90,vjust =2),
-               axis.title.x = element_text(vjust = -0.2),
-               axis.text = element_text(), 
-               axis.line = element_line(colour="black"),
-               axis.ticks = element_line(),
-               panel.grid.major = element_line(colour="#f0f0f0"),
-               panel.grid.minor = element_blank(),
-               legend.key = element_rect(colour = NA),
-               legend.position = "bottom",
-               legend.direction = "horizontal",
-               legend.key.size= unit(0.2, "cm"),
-               legend.margin = unit(0, "cm"),
-               legend.title = element_text(face="italic"),
-               plot.margin=unit(c(10,5,5,5),"mm"),
-               strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
-               strip.text = element_text(face="bold")
-          ))
-     
-}
-scale_fill_Publication <- function(...){
-      library(scales)
-      discrete_scale("fill","Publication",manual_pal(values = c("#386cb0","#fdb462","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)}
-scale_colour_Publication <- function(...){
-      library(scales)
-      discrete_scale("colour","Publication",manual_pal(values = c("#386cb0","#fdb462","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)
-
-}
-```
-## Import and munge Christmas Bird Count data & NACC species list
 ```{r importMungeData}
+## Import and munge Christmas Bird Count data & NACC species list
 # Load CBC data (YYYY - 2015)
 birds_1957to2015 <-
   read.csv(paste0(dataDir,"CBC_flga_1957to2015.csv"), stringsAsFactors = FALSE, check.names = F) %>% 
@@ -107,23 +70,53 @@ birds <- estRichness(birds, missingSpp, ignore = missingSpp[c(9)] ) %>%
 
 # Clear some temp objects
 rm(nacc, birds_1957to2015, birds2016_2018)
+
+startYear <- 1972
 ```
-## Visualize CBC effort over time
 
+## FLGA CBC
 
-```{r visualizeEffort, fig.cap= "Annual effort and species richness for the FLGA CBC circle."}
+```{r effortPlots, fig.cap= "Annual effort and species richness for the FLGA CBC circle. Dashed line indicates year we begin analyses.", include=T, echo = F }
 hours.p <- ggplot(data = birds)+
     geom_line(aes(year, hours))+
     xlim(c(min(birds$year), max(birds$year)))+
-    theme_pubclean()+
-    ylab("hours effort")
-
+    theme_bw()+
+    theme(plot.margin=grid::unit(c(0,0,0,0), "mm"))+
+    ylab("hours effort") +
+    geom_vline(xintercept = startYear, linetype = 2, color = "red")
+    
 rich.p <- ggplot(data = birds %>% distinct(year, rich))+
     geom_line(aes(year, rich))+
     xlim(c(min(birds$year), max(birds$year)))+
-    theme_pubclean() + 
-    ylab("# species")
+    theme_bw() + 
+    theme(plot.margin=grid::unit(c(0,0,0,0), "mm"))+
+    ylab("# species")+
+    geom_vline(xintercept = startYear, linetype = 2, color = "red")
+    
 
 gridExtra::grid.arrange(rich.p, hours.p)
-
 ```
+
+The count format (broken up into 11 teams and all day counts) was instituted in 1972, so i think that would be a good time to begin. Therefore, we analze data from `r paste(startYear)` to `r paste(max(birds$year))`.
+
+
+## Species groups
+```{r sppGroupTab}
+# Get species groupings
+sppGroups <- speciesGroups() 
+
+sppGroups <- stack(setNames(sppGroups, names(sppGroups)))  %>% 
+    distinct(values, ind) %>%
+    rename(species = values, 
+           sppGroup = ind) %>% 
+    mutate(index = "X") %>% 
+    spread( key  = "sppGroup" , value = "index" ,  fill = " ")
+
+sppGroups %>%
+  kable( format    = "latex", 
+      longtable = T, 
+      booktabs  = T, 
+      caption   = "Species groups for analysis") %>% 
+    kable_styling()
+```
+
