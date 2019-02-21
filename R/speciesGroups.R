@@ -316,17 +316,17 @@ sppList <- list(
     feeder.spp)
 
 names(sppList) <-
-    c("Neotropical migrants",
-      "Short-distance migrants",
-      "Locally endemic",
-      "Widespread declining",
+    c("Neotropical \nmigrants",
+      "Short \ndistance \nmigrants",
+      "Locally \nendemic",
+      "Widespread \ndeclining",
       "Non-native",
-      "N. FL wintering center",
+      "N. FL \nwintering \ncenter",
       "DDT-vics",
       "Sweetwater",
-      "Urban adapters",
-      "Ag-loss vics",
-      "Feeder birds"
+      "Urban \nadapters",
+      "Ag-loss \nvics",
+      "Feeder \nbirds"
       )
 
 return(sppList)

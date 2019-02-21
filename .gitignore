@@ -1,2 +1,29 @@
-packrat/lib*/
+
+.Rhistory
+.RData
+.DS_Store
+README.html
+issues/
+inst/doc
+vignettes/*.R
+vignettes/*.html
+revdep
+
+*.html
+*.log
+
+# Temporary files created by R markdown
+*.utf8.md
+*.knit.md
 .Rproj.user
+
+# knitr and R markdown default cache directories
+/*_cache/
+/cache/
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+
+/packrat

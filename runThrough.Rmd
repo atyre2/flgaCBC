@@ -21,7 +21,7 @@ if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages, require, character.only = TRUE)
 
 # Install git packages 
-devtools::install_github("trashbirdecology/flgaCBC", force = T)
+devtools::install_github("trashbirdecology/flgaCBC", force = F)
 library(flgaCBC)
 ```
 
@@ -119,6 +119,6 @@ sppGroups %>%
       longtable = T, 
       booktabs  = T, 
       caption   = "Species groups for analysis") %>% 
-    kable_styling()
+  kable_styling(full_width = F)
 ```
 
