@@ -29,3 +29,9 @@ vignettes/*.pdf
 /packrat
 runThrough.pdf
 runThrough.Rmd
+*.RData
+*.rdb
+*.rdx
+*.RData
+*.rdb
+*.rdx

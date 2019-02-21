@@ -9,7 +9,7 @@ speciesGroups <- function(df){
 # 1. Neotropical Migrants
 neotropMig.spp <- c(
     "American Redstart",
-    "Ash Throated Flycatcher",
+    "Ash-Throated Flycatcher",
     "Baltimore Oriole",
     "Black-Chinned Hummingbird",
     "Black-And-White Warbler",
@@ -19,10 +19,10 @@ neotropMig.spp <- c(
     "Black-Throated Blue Warbler",
     "Black-Throated Green Warbler",
     "Blackburnian Warbler",
-    "Blue Winged Warbler",
-    "Brown Crested Flycatcher",
-    "Bullock'S Oriole",
-    "Cape May Warbler",
+    "Blue-Winged Warbler",
+    "Brown-Crested Flycatcher",
+    "Bullock's Oriole",
+    "Cape May Warbler", # NOT IN this cbc data..
     "Chestnut-Sided Warbler",
     "Dickcissel",
     "Eastern Kingbird",
@@ -46,7 +46,7 @@ neotropMig.spp <- c(
     "Rufous Hummingbird",
     "Summer Tanager",
     "Tennessee Warbler",
-    "Yellow Breasted Chat",
+    "Yellow-Breasted Chat",
     "Yellow Warbler",
     "Western Kingbird",
     "Western Tanager",
@@ -113,7 +113,6 @@ nn.spp <-c(
     "Eurasian Collared-Dove",
     "House Sparrow",
     "Mallard",
-    "Mallard-Feral",
     "Mourning Dove",
     "Rock Dove"
 
@@ -124,7 +123,7 @@ noflWinter.spp <- c(
 "American Crow",
 "American Goldfinch",
 "American Robin",
-    "Black-And-White-Warbler",
+    "Black-And-White Warbler",
     # "Black & White-Warbler", # just in case
     # "Black&White-Warbler",
     "Blue-Gray Gnatcatcher",
@@ -146,14 +145,14 @@ noflWinter.spp <- c(
 "Gray Catbird",
 "House Wren",
 "Killdeer",
-"Northern MockingBird",
+"Northern Mockingbird",
 "Northern Cardinal",
 "Orange-Crowned Warbler",
 "Palm Warbler",
 "Pine Warbler",
 "Sedge Wren",
 "Red-Bellied Woodpecker",
-"Ruby Crowned Kinglet",
+"Ruby-Crowned Kinglet",
 "Swamp Sparrow",
 "Tufted Titmouse",
 "White-Eyed Vireo",
@@ -230,12 +229,11 @@ urban.spp <- c(
     "Eastern Screech-Owl",
 # "Eastern Towhee", # Andy says no
     "Fish Crow",
-"Great-Horned Owl",
+"Great Horned Owl",
     "Hooded Merganser",
 "House Finch",
     "House Wren",
         "Mallard",
-    "Mallard-Feral",
 "Northern Cardinal",
 "Pileated Woodpecker",
 "Northern Mockingbird",
@@ -319,17 +317,18 @@ sppList <- list(
     feeder.spp)
 
 names(sppList) <-
-    c(     "Neotropical migrants",
-      "Short-distance migrants",
-      "Locally endemic",
-      "Widespread declining",
+    c(
+      "Neotropical migrants",
+      "Short distance migrants",
+      "Enndemic",
+      "Ddeclining",
       "Non-native",
-      "N. FL wintering center",
-      "DDT-vics",
+      "N. FL winter",
+      "DDT vics",
       "Sweetwater",
       "Urban adapters",
-      "Ag-loss vics",
-      "Feeder birds"
+      "Ag vics",
+      "Feeder"
       )
 
 return(sppList)
