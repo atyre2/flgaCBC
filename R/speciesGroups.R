@@ -304,32 +304,30 @@ feeder.spp <-c(
 
 
 sppList <- list(
+    wideDecline.spp,
+    agLoss.spp,
+    regionEndem.spp,
+    ddt.spp,
+    feeder.spp,
+    nn.spp,
+    urban.spp,
+    noflWinter.spp,
     neotropMig.spp,
     shortDistMig.spp,
-    regionEndem.spp,
-    wideDecline.spp,
-    nn.spp,
-    noflWinter.spp,
-    ddt.spp,
-    sweetwater.spp,
-    urban.spp,
-    agLoss.spp,
-    feeder.spp)
+    sweetwater.spp)
 
 names(sppList) <-
-    c(
+    c("Declining",
+      "Ag vics",
+      "Endemic",
+      "DDT vics",
+      "Feeder",
+      "Non-native",
+      "Urban adapters",
+      "North Florida winter center",
       "Neotropical migrants",
       "Short distance migrants",
-      "Enndemic",
-      "Ddeclining",
-      "Non-native",
-      "N. FL winter",
-      "DDT vics",
-      "Sweetwater",
-      "Urban adapters",
-      "Ag vics",
-      "Feeder"
-      )
+      "Sweetwater")
 
 return(sppList)
 

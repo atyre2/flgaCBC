@@ -13,7 +13,7 @@ output: pdf_document
 ```{r libs, include=F}
 # Install packages as necessary
 list.of.packages <- c(
-    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools", "kableExtra")
+    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools", "kableExtra", "stargazer")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
@@ -55,7 +55,7 @@ if(!exists("nacc")){nacc <- getNACC(remove.hypen = F)}
 
 
 # See which species are in birds but not in nacc.list
-(missingSpp<-setdiff(unique(birds$key), nacc$key) %>% sort())
+missingSpp<-setdiff(unique(birds$key), nacc$key) %>% sort()
   ## If there are issues, I recommend fixing them in the function editNames.R, or just do it in this chunk..
         # Un resolved issues, if necessary
         # NACC does not contain the following species that occur in CBC data:
@@ -71,12 +71,12 @@ birds <- estRichness(birds, missingSpp, ignore = missingSpp[c(9)] ) %>%
 # Clear some temp objects
 rm(nacc, birds_1957to2015, birds2016_2018)
 
-startYear <- 1972
 ```
 
 ## FLGA CBC
 
 ```{r effortPlots, fig.cap= "Annual effort and species richness for the FLGA CBC circle. Dashed line indicates year we begin analyses.", include=T, echo = F }
+startYear <- 1972
 hours.p <- ggplot(data = birds)+
     geom_line(aes(year, hours))+
     xlim(c(min(birds$year), max(birds$year)))+
@@ -101,24 +101,49 @@ The count format (broken up into 11 teams and all day counts) was instituted in 
 
 
 ## Species groups
-```{r sppGroupTab, include = T, echo=F}
+
+Here are the species groupings:
+
+```{r sppGroups, include = T, echo=F}
 # Get species groupings
 sppGroups <- speciesGroups() 
 # Make a data frame from output 
 sppGroups <- stack(setNames(sppGroups, names(sppGroups)))
+
+birds.new <- sppGroups %>% left_join(birds %>% select(family, key) %>% rename(values = key))
+# see if there are discrepancies between sppGroups and birds common names
+to.edit.sppGroups <- birds.new %>% distinct(values, family) %>%  filter(is.na(family))
+    # the typos should now all just be spp that dont exist in your CBC data, rather than typos!
+
 # Mugne for table
-sppGroups <- sppGroups %>% 
-    distinct(values, ind) %>%
+birds.new.wide <- birds.new %>% 
+    filter(!is.na(family)) %>% 
+    distinct(family, values, ind) %>%
     rename(species = values, 
            sppGroup = ind) %>% 
-    mutate(index = "X") %>% 
-    spread( key  = "sppGroup" , value = "index" ,  fill = " ")
+    dplyr::select(sppGroup, family, species) %>% 
+    mutate(family = as.character(family)) %>% 
+    arrange(sppGroup, family)
 
-sppGroups %>%
-  kable( format    = "latex", 
+row.ind <-  birds.new.wide %>% 
+    group_by(sppGroup) %>% 
+    summarise(row.ind = n()) %>% 
+    mutate(row.ind = cumsum(row.ind))
+# row.ind <-  matrix(row.ind$row.ind, nrow=2) # to get every otehr row value for table styling ( custom gray rows)
+# row.ind <- c(row.ind[1, 1], row.ind[2, 1],
+#                   row.ind[1, 3], row.ind[2, 3],
+#                   row.ind[1, 5], row.ind[2, 5])        
+# Maake the table
+birds.new.wide %>%
+  kable(format    = "latex", 
       longtable = T, 
       booktabs  = T, 
       caption   = "Species groups for analysis") %>% 
-  kable_styling(full_width = F)
+    collapse_rows(columns = 1:2, 
+                  latex_hline = "major",
+                  valign = "middle") %>%
+    column_spec(1:2, bold = T) %>%
+    kable_styling(full_width = F, font_size = 9, latex_options = c("repeat_header"))
+
 ```
 
