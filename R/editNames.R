@@ -28,6 +28,7 @@ df <-     df %>%
 
     mutate(key = gsub( "Black\\&", "Black-And-" , key, fixed = T)) %>%
     mutate(key = gsub( "Black&", "Black-And-" , key, fixed = T)) %>%
+    mutate(key = gsub( "And-White-Warbler", "And-White Warbler" , key, fixed = T)) %>%
 
 #  mutate(key =gsub( "Black\\&", "Black-And-", key,  fixed = T)) %>%
  mutate(key =gsub( "Black-Neccked Stilt", "Black-Necked Stilt", key,  fixed = T)) %>%
