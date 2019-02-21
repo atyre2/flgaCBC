@@ -21,7 +21,7 @@ if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages, require, character.only = TRUE)
 
 # Install git packages 
-devtools::install_github("trashbirdecology/flgaCBC", force = T)
+devtools::install_github("trashbirdecology/flgaCBC", force = F)
 library(flgaCBC)
 ```
 
@@ -79,8 +79,6 @@ How well do trends in local CBCs mirror larger trends? Can we use insights from 
 Are there processes other than actual population changes creating apparent population changes (superior birding skills (Sauer et al. 1994; Dunn et al. 2005), more knowledge of where birds might be hiding? More competition among groups? More bird feeder watchers (Dunn et al. 2005)? Better techniques such as playbacks of mobbing or screech owls? Stable populations but decreases caused by an increasing count effort that can only count a fixed number of individuals? Declining birding skills as we get older?) Changes in effort over time (Butcher and McCulloch 1990)
 
 ## On the CBC data
-
-
 ```{r effortPlots, fig.cap= "Annual effort and species richness for the FLGA CBC circle. Dashed line indicates year we begin analyses.", include=T, echo = F }
 startYear <- 1972
 hours.p <- ggplot(data = birds)+
@@ -174,32 +172,79 @@ y = \alpha + s(year) + s(hours) \\
 
 ```{r runGroupGams}
 # Add groups to the bird data 
-birds.grouped <- full_join(birds, birds.new %>% rename(species = values) %>%  na.omit(family))
-birds.grouped
+birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family))
+
 if(is.factor(birds.grouped$ind)){
     index <- levels(birds.grouped$ind)}else(index <- unique(birds.grouped))
 groupGams <- list()
 for (i in 1:index) {
-    gam.data <- birds %>% 
+    gam.data <- birds.grouped %>% 
         # keep species grouping i
-        filter(ind == index[i])
-        
+        # filter(ind == index[i], 
+        #        year > startYear)  # %>%
+        group_by(year) %>%
+        mutate(value = sum(value)) %>%
+        distinct(year, hours,value )
+    #     
     groupGams[[i]] =
-        gam(
-            # log10(count+1.0e-50/Hours) ~  s(Year) ,
-            count ~ s(Year) + s(Hours),
+        gamm(
+            value ~ s(year) + hours,
             method = "REML",
-            family = poisson,
-            data = myDF[[i]] %>% filter(Year >= 1985)
-            # scale = 1,
-            # gamma = gamma
+            data = gam.data
         )
-}
+    
+            # Beacuse time series are usually autocorrelated, the standard errors may be deflated. Let's look at ACF
+            ## look at autocorrelation in residuals:
+        acf(resid(groupGams[[i]]$lme, type = "normalized"))
+        ## ...wait... look at the plot, only then do...
+        pacf(resid(groupGams.AR1[[i]] $lme, type = "normalized"))
 
-names(groupGams) <- names(myDF)
+## AR models    
+ar1.gam =
+                gamm(
+                    value ~ s(year) + hours,
+                    method = "REML",
+                    data = gam.data,
+                    correlation = corARMA(form = ~ year, p = 1)
+                )
+  
+ar2.gam  =
+                gamm(
+                    value ~ s(year) + hours,
+                    method = "REML",
+                    data = gam.data,
+                    correlation = corARMA(form = ~ year, p = 2)
+                )
+ar3.gam =
+                gamm(
+                    value ~ s(year) + hours,
+                    method = "REML",
+                    data = gam.data,
+                    correlation = corARMA(form = ~ year, p = 3)
+                )
+
+## ...wait... look at the plot, only then do...
+pacf(resid(ar1.gam$lme, type = "normalized"))
+pacf(resid(ar2.gam$lme, type = "normalized"))
+pacf(resid(ar3.gam$lme, type = "normalized"))
+
+aov.tab = anova(ar1.gam$lme, ar2.gam$lme, ar3.gam$lme)
+      
+# Keep the best fitting model
+mod.keep = aov.tab %>% 
+    slice(which.min(`p-value`)) %>% 
+    mutate(modelName = paste0("ar", Model, ".gam")) %>% 
+    select(modelName, df, AIC, BIC, logLik, L.Ratio, "p-value")
+
+
+
+    }
+
+names(groupGams) <- index
 
 ```
 
+We controlled for stationarity by taking second differences (i.e., using an AR model with lag = 2).
 
 # References not yet defined in .bib
 
