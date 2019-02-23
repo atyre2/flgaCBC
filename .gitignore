@@ -20,6 +20,8 @@ revdep
 # knitr and R markdown default cache directories
 /*_cache/
 /cache/
+runThrough_cache/*
+runThrough_files/*
 
 # produced vignettes
 vignettes/*.html
@@ -37,3 +39,5 @@ runThrough.Rmd
 *.rdx
 *.png
 *.pdf
+runThrough.pdf
+runThrough_cache/latex/__packages
