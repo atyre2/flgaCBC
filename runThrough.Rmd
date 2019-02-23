@@ -13,7 +13,7 @@ output: pdf_document
 ```{r libs, include=F}
 # Install packages as necessary
 list.of.packages <- c(
-    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools", "kableExtra", "stargazer", "nlme")
+    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools", "kableExtra", "stargazer", "nlme", "mgcv")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
@@ -121,7 +121,7 @@ sppGroups <- stack(setNames(sppGroups, names(sppGroups)))
 
 birds.new <- sppGroups %>% left_join(birds %>% select(family, key) %>% rename(values = key))
 # see if there are discrepancies between sppGroups and birds common names
-to.edit.sppGroups <- birds.new %>% distinct(values, family) %>%  filter(is.na(family))
+(to.edit.sppGroups <- birds.new %>% distinct(values, family) %>%  filter(is.na(family)))
     # the typos should now all just be spp that dont exist in your CBC data, rather than typos!
 ```
 
@@ -172,18 +172,15 @@ y_i ~ some exp. distribution
 - Most species trends were non-linear over the study period. GAM optimizes the residuals by fitting knots in the model (count, response value), so if the trend is linear, it will fit it.
 - ARound 1980 the hours effort and number of participants increased linearally, therefore we did not fit a smooth to the hours effort (see \@ref(fig:effortPlots)). 
 - We controlled for temporal autocorrelation by taking first, second, adn third differences (AR1, AR2, and AR3). We chose the best fitting model for each species by running likelihood ratios
+- A GAM basically a GLM where the linear preditor(s) are influenced by some unknown smooth function, and a GAMM is a GLMM where "..."
+- "for a Poisson model the expected value after log transformation is modelled to be linearly dependent on the explanatory variables""
+- 
+
 
 ## Analysis results
-```{r runGroupGams}
-# Add groups to the bird data 
-birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family))
+```{r getGamResults}
 
-# Run the gams in all the groups (saves figs to file and exports a list of results)
-gams.grouped <- runGams(birds.grouped, group.var = "ind", year.start = 1973)
-
-# Run the gams in all the species (saves figs to file and exports a list of results)
-gams.species <- runGams(birds.grouped %>% filter(key !="Mallard"), group.var = "key", year.start = 1973)
-
+# This chunk sources the results from analysis.R
 
 # Unlist the list of lists
 best.mod.LRresults <- ???(gamResults.list$LRresults)
