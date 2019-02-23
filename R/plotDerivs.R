@@ -1,5 +1,3 @@
-
-
 #' @description Calculate finite diffs and plot GAMS. This is to be used INSIDE the runGams function.
 #' @export getAndPlotDerivs
 #' @param myMod The model gam
