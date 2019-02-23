@@ -77,7 +77,7 @@ gam.results <- list()
                group_by(year, group.var, key) %>%
                mutate(value = sum(value)) %>%
                distinct(key, year, group.var, .keep_all = T) %>%
-           ungroup()
+               ungroup()
            spp.keep <- gam.data %>%
                filter(value >0) %>%
                group_by(group.var, key) %>%
@@ -125,9 +125,11 @@ gam.results <- list()
                     method = "REML",
                     data = gam.data,
                     family = family)
-
-
-
+       gamplots.dir <- paste0(fig.out.path, "gamPlots/")
+       dir.create(gamplots.dir)
+       pdf(file = paste0(gamplots.dir, "gamPlots_", group.var, "_", index[[i]], Sys.Date(),".pdf"))
+       plot(gam.results[[i]])
+        dev.off()
        names(gam.results)[[i]] <- index[i]
 
         # Run ar-X models.
