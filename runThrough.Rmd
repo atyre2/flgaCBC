@@ -141,26 +141,23 @@ In some portions, we present results in groups of species according to various h
 
 We estimated species population trends in the Gainesville, Florida Christmas Bird Count (CBC; National Audubon Society REF) circle (FLGA) for the period of `r startYear` to 2015 using generalized additive models (GAMs, Hastie and Tibshirani 1990; Wood 2006). GAMs are a flexible implementation of generalized linear models in cases where species’ populations exhibit non-linear trends. GAMs optimize the predictability of the relationship between the response and predictor variable(s) while accounting for the noise associated with year-to-year fluctuations in species counts. 
 
-We ran two types of analyses: (i) species-level trends and (ii) group-level trends.
-
-### Model type 1: Species-level trends (I do not think we should use these models)
+### Species-level trends
 
 This model includes a factor for species identity. A smooth is produced for each species over time, and is also included as a fixed effect. We assumed the response variable distribution as Poisson. This means that the expected value after log transformation is modelled to be linearly dependent on the explanatory variables.
 
-
 \begin{equation} 
-g(E(y_g)) = \beta_0 f(year, species) + species + hours + \epsilon_i, \\
-y_g ~ "quasi-poisson" \\
+g(E(y_i)) = \beta_0 f(year_i) + hours + \epsilon_i, 
 \end{equation} 
+<!-- y_g ~ quasi-poisson -->
 
-### Model type 2: Group trends 
+<!-- ### Model type 2: Group trends  -->
 
-We analyzed individual species’ trends using the following model:
+<!-- We analyzed individual species’ trends using the following model: -->
 
-\begin{equation}
-g(E(y_species)) = \beta_0 f(year, species) + hours + \epsilon_i, \\
-y_species ~ "quasi-poisson"
-\end{equation}
+<!-- \begin{equation} -->
+<!-- g(E(y_g)) = \beta_0 f(year, species) + species + hours + \epsilon_i,  -->
+<!-- \end{equation} -->
+<!-- <!-- y_species ~ quasi-poisson --> -->
 
 
 # Results
