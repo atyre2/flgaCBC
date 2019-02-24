@@ -21,6 +21,8 @@ revdep
 /*_cache/
 /cache/
 runThrough_cache/*
+/runThrough_cache/*
+/runThrough_cache
 runThrough_files/*
 
 # produced vignettes
