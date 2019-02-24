@@ -2,12 +2,12 @@
 title: "flgaCBC"
 author: "Burnett, JL"
 date: "February 20, 2019"
-output: pdf_document
+output:
+  bookdown::pdf_document2
 ---
-```{r DEFINE.SOME.PARAMS}
+```{r DEFINE.SOME.PARAMS, include = F}
 startYear <- 1972
 ```
-
 
 ```{r libs, include=F}
 # Install packages as necessary
@@ -24,9 +24,10 @@ devtools::install_github("trashbirdecology/flgaCBC", force = F)
 library(flgaCBC)
 ```
 
-```{r setup, include = F}
+```{r chunkOpts, include = F}
 # Set default chunk options
-knitr::opts_chunk$set( warning = F, message = F,  fig.cap = "...", cache = T, eval=T, echo=F)
+knitr::opts_chunk$set(eval=T, echo=F, tidy = T,message=F, warning=F, collapse = T,fig.show = "hold", cache = T)
+
 # Define directories and create as necessary
 dataDir <- paste0(here::here(), "/data/")
 ```
@@ -72,21 +73,7 @@ rm(nacc, birds_1957to2015, birds2016_2018)
 
 ```
 
-# Introduction
-CBC and BBS have become powerful tools for understanding large-scale patterns of population changes in North American birds, having been applied to guilds, and individual species.  
-Restrictions and major biases, however, do apply to these citizen science data (Dunn et al. 2005). 
-How well do trends in local CBCs mirror larger trends? Can we use insights from long-term local participants to identify possible causes of some of these trends? What have local birders observed that might help explain declines and increases. Habitat loss, succession, climate, dog fennel, prairie regrowth, drought, cyclic changes of drying, 
-Are there processes other than actual population changes creating apparent population changes (superior birding skills (Sauer et al. 1994; Dunn et al. 2005), more knowledge of where birds might be hiding? More competition among groups? More bird feeder watchers (Dunn et al. 2005)? Better techniques such as playbacks of mobbing or screech owls? Stable populations but decreases caused by an increasing count effort that can only count a fixed number of individuals? Declining birding skills as we get older?) Changes in effort over time (Butcher and McCulloch 1990)
-
-## On the CBC data
-
-The count format (broken up into 11 teams and all day counts) was instituted in 1972. Therefore, we analyzed data from ß`r paste(startYear)` to `r paste(max(birds$year))`.
-
-## Grouping of species
-
-Let me know if you want any to change (see Table \@ref(tab:sppGroupTab)).
-
-```{r groupSpecies}
+```{r groupSpeciesF}
 # Get species groupings
 sppGroups <- speciesGroups() 
 # Make a data frame from output 
@@ -95,12 +82,58 @@ sppGroups <- stack(setNames(sppGroups, names(sppGroups)))
 birds.new <- sppGroups %>% left_join(birds %>% select(family, key) %>% rename(values = key))
 
 # see if there are discrepancies between sppGroups and birds common names
-(to.edit.sppGroups <- birds.new %>% distinct(values, family) %>%  filter(is.na(family)))
+to.edit.sppGroups <- birds.new %>% distinct(values, family) %>%  filter(is.na(family))
     # the typos should now all just be spp that dont exist in your CBC data, rather than typos!
 ```
 
-In some portions, we present results in groups of species according to various hypotheses. Species groupings are as follows: `r unique(sppGroups$ind)` (see Table \@ref(sppGroupTab)).
+```{r runModels, eval = F, echo=F, warning=F, message=F}
+# Add groups to the bird data
+birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family)) %>%
+    distinct()
 
+# Run some basic GAMs.
+# Run the gam for species (ind by spp)
+# gam.results.ind <- runGams(df = birds.grouped, family = "quasipoisson",
+#                            group.var = "ind",
+#                            rds.filename =  "groupLevelWithFixed",
+#                            mod.formula  = as.formula("value ~ s(year, by = as.factor(key)) + key + hours"),
+#                            fig.out.path = NULL,
+#                            year.start = 1973,
+#                            zero.thresh = 0.25,
+#                            length.out = 200)
+# gam.results.ind     <-readRDS(paste0(here::here(),"/Results/gamResults_","groupLevelWithFixed",  Sys.Date(),".rds"))
+
+
+# Run the gam for species (key)
+gam.results.key <- runGams(df = birds.grouped, family = "quasipoisson",
+                   group.var = "key",
+                   rds.filename =  "speciesLevel",
+                   mod.formula  = as.formula("value ~ s(year) + hours"),
+                   fig.out.path = NULL,
+                   year.start = 1973,
+                   zero.thresh = 0.25,
+                   length.out = 200)
+
+gam.results.key <-readRDS(paste0(here::here(),"/Results/gamResults_","speciesLevel",  Sys.Date(),".rds"))
+
+```
+
+
+# Introduction
+CBC and BBS have become powerful tools for understanding large-scale patterns of population changes in North American birds, having been applied to guilds, and individual species.  
+Restrictions and major biases, however, do apply to these citizen science data (Dunn et al. 2005). 
+How well do trends in local CBCs mirror larger trends? Can we use insights from long-term local participants to identify possible causes of some of these trends? What have local birders observed that might help explain declines and increases. Habitat loss, succession, climate, dog fennel, prairie regrowth, drought, cyclic changes of drying, 
+Are there processes other than actual population changes creating apparent population changes (superior birding skills (Sauer et al. 1994; Dunn et al. 2005), more knowledge of where birds might be hiding? More competition among groups? More bird feeder watchers (Dunn et al. 2005)? Better techniques such as playbacks of mobbing or screech owls? Stable populations but decreases caused by an increasing count effort that can only count a fixed number of individuals? Declining birding skills as we get older?) Changes in effort over time (Butcher and McCulloch 1990)
+
+## On the CBC data
+
+The count format (broken up into 11 teams and all day counts) was instituted in 1972. Therefore, we analyzed data from `r paste(startYear)` to `r paste(max(birds$year))`.
+
+## Grouping of species
+
+Let me know if you want any to change (see Table \@ref(tab:sppGroupTab)).
+
+In some portions, we present results in groups of species according to various hypotheses. Species groupings are as follows: `r unique(sppGroups$ind)` (see Table \@ref(tab:sppGroupTab)).
 
 # Statistical analysis of population trends 
 
@@ -117,8 +150,7 @@ This model includes a factor for species identity. A smooth is produced for each
 
 \begin{equation} 
 g(E(y_g)) = \beta_0 f(year, species) + species + hours + \epsilon_i, \\
-y_g ~ quasi-poisson \\
-where g is species group
+y_g ~ "quasi-poisson" \\
 \end{equation} 
 
 ### Model type 2: Group trends 
@@ -127,8 +159,7 @@ We analyzed individual species’ trends using the following model:
 
 \begin{equation}
 g(E(y_species)) = \beta_0 f(year, species) + hours + \epsilon_i, \\
-y_species ~ quasi-poisson
-where g is species group
+y_species ~ "quasi-poisson"
 \end{equation}
 
 
@@ -137,48 +168,101 @@ where g is species group
 - Unless we plan on expicitly adding the species counts across groups, we should just interpret individual species' trends in groups. 
 - Many species trends were non-linear over the study period. GAM optimizes the residuals by fitting knots in the model (count, response value), so if the trend is linear, it will fit it.
     * However, I would like to go back through and run *glm(bpph~year)* or *glm(count~year)* on those. 
-    * Another issue is species which do not occur or left the area during our study period. Right now our model assumes missing data as zero (e.g. see Figure \@ref(fig:hofiEx)). 
+    * Another issue is species which do not occur or left the area during our study period. Right now our model assumes missing data as zero (e.g. see Figure \@ref(fig:hofiExFig)). 
     * Another issue is species whose counts are highly variable (e.g., Red-Winged Blackbird; see Figure \@ref(fig:rwbbFig))
-- Around 1980 the hours effort and number of participants increased linearally, therefore we did not fit a smooth to the hours effort (see Figure \@ref(fig:effortPlots)). 
-- I also looked a temporal autocorrelation (see [the plots in this link]()). It's strange because the effect of temporal autocorrelation for many species was different at 1 & 3 yeras vs. 0 and 2 years
+- Around 1980 the hours effort and number of participants increased linearally, therefore we did not fit a smooth to the hours effort (see Figure \@ref(fig:effortFig)). 
+- I also looked a temporal autocorrelation (see [**the plots in this zip file--this link will download zip folder..unzip to see figures**](https://github.com/TrashBirdEcology/flgaCBC/blob/master/Figures/gamPlots.zip)). It's strange because the effect of temporal autocorrelation for many species was different at 1 & 3 yeras vs. 0 and 2 years
 - We controlled for temporal autocorrelation by taking first, second, adn third differences (AR1, AR2, and AR3). We chose the best fitting model for each species by running likelihood ratios
 <!-- - A GAM basically a GLM where the linear preditor(s) are influenced by some unknown smooth function, and a GAMM is a GLMM where "..." -->
 
-## Analysis results
-```{r runModels, eval = F}
-# Add groups to the bird data
-birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family)) %>%
+## Analysis results (download the files--see below!!)
+
+[**Click this link to download a compressed (.zip) folder filled with species-level trend figures.**](https://github.com/TrashBirdEcology/flgaCBC/blob/master/Figures/gamPlots.zip).
+
+These are derivatives -- so basically, if the estimate (and confidence interval) is above or below zero, the species trend was increasing or declining, respectively, that year. Notice, some species (e.g. RSHA) look funky. This could mean many things, but is likely one of two things: (1) a linear relationship exists, we should just run glm, or (ii) the counts are highly variable, and we should visualize raw data.
+
+Are there any species in these results that very much surprise you? 
+
+# Tables
+```{r sppGroupTab, eval=T, echo=F}
+# Munge data frame for table
+birds.new.wide <- birds.new %>% 
+    filter(!is.na(family)) %>% 
+    distinct(family, values, ind) %>%
+    rename(species = values, 
+           sppGroup = ind) %>% 
+    dplyr::select(sppGroup, family, species) %>% 
+    mutate(family = as.character(family)) %>% 
+    arrange(sppGroup, family)
+
+# row.ind <-  birds.new.wide %>% 
+#     group_by(sppGroup) %>% 
+#     summarise(row.ind = n()) %>% 
+#     mutate(row.ind = cumsum(row.ind))
+# row.ind <-  matrix(row.ind$row.ind, nrow=2) # to get every otehr row value for table styling ( custom gray rows)
+# row.ind <- c(row.ind[1, 1], row.ind[2, 1],
+#                   row.ind[1, 3], row.ind[2, 3],
+#                   row.ind[1, 5], row.ind[2, 5])        
+# Maake the table
+birds.new.wide %>%
+  kable(format    = "latex", 
+      longtable = T, 
+      booktabs  = T, 
+      caption   = "These are the species groups we chose. Let me know if we want to make any updates. Note, however, that not all species have sufficient data to be analyzed. See tables below for more details on which were and were not analyzed.") %>% 
+    column_spec(1:2, bold = T) %>% # col_spec BEFORE collapse rows else weird shit happens.
+    collapse_rows(columns = 1:2, 
+                  latex_hline = "major",
+                  valign = "middle") %>%
+    kable_styling(full_width = F, font_size = 9)#, latex_options = c("repeat_header"))
+```
+
+```{r sppAnalysedTab,  eval=T, echo=F}
+
+if(!exists("birds.grouped")) birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family)) %>%
     distinct()
 
-# Run some basic GAMs.
-Run the gam for species (ind by spp)
-gam.results.ind <- runGams(df = birds.grouped, family = "quasipoisson",
-                           group.var = "ind",
-                           rds.filename =  "groupLevelWithFixed",
-                           mod.formula  = as.formula("value ~ s(year, by = as.factor(key)) + key + hours"),
-                           fig.out.path = NULL,
-                           year.start = 1973,
-                           zero.thresh = 0.25,
-                           length.out = 200)
-gam.results.ind     <-readRDS(paste0(here::here(),"/Results/gamResults_","groupLevelWithFixed",  Sys.Date(),".rds"))
-
-
-# Run the gam for species (key)
-gam.results.key <- runGams(df = birds.grouped, family = "quasipoisson",
-                   group.var = "key",
-                   rds.filename =  "speciesLevel",
-                   mod.formula  = as.formula("value ~ s(year) + hours"),
-                   fig.out.path = NULL,
-                   year.start = 1973,
-                   zero.thresh = 0.11,
-                   length.out = 200)
-
 gam.results.key     <-readRDS(paste0(here::here(),"/Results/gamResults_","speciesLevel",  Sys.Date(),".rds"))
+# Maake the table
 
+t = data.frame(key=as.factor(unique(names(gam.results.key)))) %>% 
+    left_join(birds.grouped %>% distinct(ind, family, key)) %>%
+    select(ind, family, key) %>% 
+    mutate(ind = str_replace_na(ind, "No group assigned"))  %>%
+    arrange(ind)
+
+t %>% 
+      kable(format   = "latex", 
+      longtable = T, 
+      booktabs  = T, 
+      caption="Species analysed") %>%
+    column_spec(1:2, bold = T) %>% 
+    collapse_rows(columns = 1:2, 
+                  latex_hline = "major", 
+                  valign = "middle") %>%
+    kable_styling(full_width = F, font_size = 9)
+```
+
+```{r sppNotAnalysedTab, eval=T, echo=F}
+# Maake the table
+t=birds.grouped %>% distinct(ind, family, key) %>% filter(!key %in% unique(names(gam.results.key))) %>% 
+    mutate(ind = str_replace_na(ind, "No group assigned"))  %>%
+    select(ind, family, key) %>% 
+    arrange(ind)
+ t %>%
+  kable(format    = "latex", 
+      longtable = T, 
+      booktabs  = T, 
+      caption   = paste0("Species **NOT** analysed: ", length(t))) %>% 
+    column_spec(1:2, bold = T) %>% # col_spec BEFORE collapse rows else weird shit happens.
+    collapse_rows(columns = 1:2, 
+                  latex_hline = "major",
+                  valign = "middle") %>%
+    kable_styling(full_width = F, font_size = 9)
 ```
 
 
-```{r effortPlots, fig.cap= "Annual effort and species richness for the FLGA CBC circle. Dashed line indicates year we begin analyses.", include=T, echo = F }
+# Figures
+```{r effortFig, fig.cap= "Annual effort and species richness for the FLGA CBC circle. Dashed line indicates year we begin analyses.", eval=T, echo=F}
 hours.p <- ggplot(data = birds)+
     geom_line(aes(year, hours))+
     theme_bw()+
@@ -206,66 +290,7 @@ partic.p <- ggplot(data = birds %>% distinct(year, participants))+
 gridExtra::grid.arrange(rich.p, hours.p, partic.p)
 ```
 
-```{r sppGroupTab}
-# Munge data frame for table
-birds.new.wide <- birds.new %>% 
-    filter(!is.na(family)) %>% 
-    distinct(family, values, ind) %>%
-    rename(species = values, 
-           sppGroup = ind) %>% 
-    dplyr::select(sppGroup, family, species) %>% 
-    mutate(family = as.character(family)) %>% 
-    arrange(sppGroup, family)
-
-# row.ind <-  birds.new.wide %>% 
-#     group_by(sppGroup) %>% 
-#     summarise(row.ind = n()) %>% 
-#     mutate(row.ind = cumsum(row.ind))
-# row.ind <-  matrix(row.ind$row.ind, nrow=2) # to get every otehr row value for table styling ( custom gray rows)
-# row.ind <- c(row.ind[1, 1], row.ind[2, 1],
-#                   row.ind[1, 3], row.ind[2, 3],
-#                   row.ind[1, 5], row.ind[2, 5])        
-# Maake the table
-birds.new.wide %>%
-  kable(format    = "latex", 
-      longtable = T, 
-      booktabs  = T, 
-      caption   = "Species groups for analysis") %>% 
-    column_spec(1:2, bold = T) %>% # col_spec BEFORE collapse rows else weird shit happens.
-    collapse_rows(columns = 1:2, 
-                  latex_hline = "major",
-                  valign = "middle") %>%
-    kable_styling(full_width = F, font_size = 9)#, latex_options = c("repeat_header"))
-```
-
-```{r sppAnalysedTab}
-
-if(!exists("birds.grouped")) birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family)) %>%
-    distinct()
-
-gam.results.key     <-readRDS(paste0(here::here(),"/Results/gamResults_","speciesLevel",  Sys.Date(),".rds"))
-# Maake the table
-t = unique(names(gam.results.key))
-t %>% 
-      kable(format    = "latex", 
-      longtable = T, 
-      booktabs  = T, 
-      caption   = paste0("Species analysed: ", length(t))) %>% 
-    kable_styling(full_width = F, font_size = 9)#, latex_options = c("repeat_header"))
-```
-
-```{r sppNotAnalysedTab}
-# Maake the table
-t=birds.grouped %>% distinct(key) %>% filter(!key %in% unique(names(gam.results.key)))
- t %>%
-  kable(format    = "latex", 
-      longtable = T, 
-      booktabs  = T, 
-      caption   = paste0("Species **NOT** analysed: ", length(t))) %>% 
-    kable_styling(full_width = F, font_size = 9)#, latex_options = c("repeat_header"))
-```
-
-```{r hofiEx, fig.cap="Example of missing data prior to year YYYY. We might want to go back through and adjust our start year for those species that did not occur in the region before or after some year (**i.e. will need expert advice**)."}
+```{r hofiExFig, eval=T, echo=F,cache=T, fig.cap="Example of missing data prior to year YYYY. We might want to go back through and adjust our start year for those species that did not occur in the region before or after some year (**i.e. will need expert advice**)."}
 ts= birds.grouped %>% filter(key == "House Finch") %>% 
     distinct(year, key, value, hours)
 ggplot(ts, aes(year, value))+
@@ -274,7 +299,7 @@ ggplot(ts, aes(year, value))+
     ylab("House Finch")
 ```
 
-```{r rwbbFig, cache = T, include=T,echo=F, eval=T, fig.cap="HOFI example -- species entering or leaving region for sequential years within our study period."}
+```{r rwbbFig, cache = T, eval=T, echo=F,  fig.cap="HOFI example -- species entering or leaving region for sequential years within our study period."}
 
 ts=birds.grouped %>% filter(key == "Red-Winged Blackbird") %>% 
     distinct(year, key, value, hours)
@@ -282,13 +307,12 @@ ggplot(ts, aes(year, value))+
     geom_point()+ylab("Red-Winged Blackbird")+
     # geom_smooth(method='lm')+
     geom_smooth(method ="gam")
+
 ```
 
+# References not yet defined in .bib
 
-
-<!-- # References not yet defined in .bib -->
-
-<!-- Fewster, Rachel M., et al. "Analysis of population trends for farmland birds using generalized additive models." Ecology 81.7 (2000): 1970-1984. -->
-<!-- Hastie, Trevor J., and Robert J. Tibshirani. Generalized additive models. Vol. 43. CRC Press, 1990. -->
-<!-- R Core Team (2015). R: A language  and environment for statistical computing. R Founding for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/. -->
-<!-- Wood, S.N. (2006) Generalized Additive Models: An Introduction with R. Chapman and Hall/CRC. -->
+Fewster, Rachel M., et al. "Analysis of population trends for farmland birds using generalized additive models." Ecology 81.7 (2000): 1970-1984.
+Hastie, Trevor J., and Robert J. Tibshirani. Generalized additive models. Vol. 43. CRC Press, 1990.
+R Core Team (2015). R: A language  and environment for statistical computing. R Founding for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+Wood, S.N. (2006) Generalized Additive Models: An Introduction with R. Chapman and Hall/CRC.
