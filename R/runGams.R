@@ -172,7 +172,7 @@ gam.results <- list()
         #             family = family)
         #         }
 
-print(paste0("end run: ", index[i]," of ", length(index)))
+# print(paste0("end run: ", index[i]," of ", length(index)))
 } # END FOR LOOP I
 
 # remove the empty elements (species/groups skipped)
