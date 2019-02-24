@@ -4,11 +4,6 @@ author: "Burnett, JL"
 date: "February 20, 2019"
 output: pdf_document
 ---
-```{r JESSICANOTES, eval=F}
-## SPECIES TO INCLUDE
-# You can count hummingbird sp, Archilochus sp., waterthrush sp., Empidonax sp. as Neotropical migrants,   Crow sp. as urban adapters, accipiter sp. as feeder adapters. I'd say ignore the rest.   
-
-```
 
 ```{r libs, include=F}
 # Install packages as necessary
@@ -21,7 +16,7 @@ if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages, require, character.only = TRUE)
 
 # Install git packages 
-devtools::install_github("trashbirdecology/flgaCBC", force = F)
+# devtools::install_github("trashbirdecology/flgaCBC", force = F)
 library(flgaCBC)
 ```
 
@@ -162,10 +157,15 @@ birds.new.wide %>%
 
 # Statistical analysis of population trends
 ## Model structure
-We estimated species population trends in the Gainesville, Florida Christmas Bird Count (CBC; National Audubon Society REF) circle (FLGA) for the period of `r startYear` to 2015 using generalized additive models (GAMs, Hastie and Tibshirani 1990; Wood 2006). GAMs are a flexible implementation of generalized linear models in cases where species’ populations exhibit non-linear trends. GAMs optimize the predictability of the relationship between the response and predictor variable(s) while accounting for the noise associated with year-to-year fluctuations in species counts.  We analyzed individual species’ trends using the a generalized additive model: 
+We estimated species population trends in the Gainesville, Florida Christmas Bird Count (CBC; National Audubon Society REF) circle (FLGA) for the period of `r startYear` to 2015 using generalized additive models (GAMs, Hastie and Tibshirani 1990; Wood 2006). GAMs are a flexible implementation of generalized linear models in cases where species’ populations exhibit non-linear trends. GAMs optimize the predictability of the relationship between the response and predictor variable(s) while accounting for the noise associated with year-to-year fluctuations in species counts. 
+
+We ran two types of analyses: (i) species-level trends and (ii) group-level trends.
+
+ng two GAMs. First, we aggregated species into groups, and (see \@ref(tab:sppGroupTab)). Next, we analyzed individual species trends. 
+We analyzed individual species’ trends using the a generalized additive model: 
 
 \begin{equation} 
-g(E(y_i)) = \beta_0 _ f(year_i) + \epsilon_i, \\
+g(E(y_i)) = \beta_0 f(year_i) + \epsilon_i, \\
 y_i ~ some exp. distribution
 \end{equation} 
 
@@ -178,17 +178,65 @@ y_i ~ some exp. distribution
 
 
 ## Analysis results
-```{r getGamResults}
+```{r runModels, cahe = T}
+# Add groups to the bird data
+birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family)) %>%
+    distinct()
 
-# This chunk sources the results from analysis.R
+# Run some basic GAMs.
+# Run the gam for species (ind by spp)
+gam.results.ind <- runGams(df = birds.grouped, family = "quasipoisson",
+                           group.var = "ind",
+                           rds.filename =  "indSum.withFixedEf",
+                           mod.formula  = as.formula("value ~ s(year, by = \"key\") + key + hours"),
+                           fig.out.path = NULL,
+                           year.start = 1973,
+                           zero.thresh = 0.11,
+                           length.out = 200)
+plot(gam.results.ind[[1]])
+# Run the gam for species (ind by spp)
+# gam.results.ind.sum <- runGams(df = birds.grouped, family = "quasipoisson",
+#                            group.var = "ind",
+#                            mod.formula  = as.formula("value ~ s(year) + hours"),
+#                            fig.out.path = NULL,
+#                            year.start = 1973,
+#                            zero.thresh = 0.11,
+#                            length.out = 200)
 
-# Unlist the list of lists
-best.mod.LRresults <- ???(gamResults.list$LRresults)
-best.gam.results <- ??(gamResults.list$bestGamModelResults)
+# Run the gam for species (key)
+# gam.results.key <- runGams(df = birds.grouped, family = "quasipoisson",
+#                    group.var = "key",
+#                    mod.formula  = as.formula("value ~ s(year) + hours"),
+#                    fig.out.path = NULL,
+#                    year.start = 1973,
+#                    zero.thresh = 0.11,
+#                    length.out = 200)
+
+gam.results.key     <-readRDS(paste0(here::here(),"/Results/gamResults_key2019-02-23.rds"))
+gam.results.ind     <-readRDS(paste0(here::here(),"/Results/gamResults_ind2019-02-23.rds"))
+gam.results.ind.sum <-readRDS(paste0(here::here(),"/Results/gamResults_indSum2019-02-23.rds"))
+
+gam.results.ind.sum <-readRDS(paste0(here::here(),"/Results/gamResults_indSum2019-02-23.rds"))
+
+
 
 ```
 
 We controlled for stationarity by taking second differences (i.e., using an AR model with lag = 2).
+
+```{r sppAnalysedTab, include = T, echo=F, warning=F, message=F}
+
+# Maake the table
+ unique(names(gam.results.key)) %>% 
+  kable(format    = "latex", 
+      longtable = T, 
+      booktabs  = T, 
+      caption   = "Species with sufficient data for analysis") %>% 
+    kable_styling(full_width = F, font_size = 9)#, latex_options = c("repeat_header"))
+```
+
+
+
 
 # References not yet defined in .bib
 

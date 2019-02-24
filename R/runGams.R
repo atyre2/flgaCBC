@@ -8,10 +8,12 @@
 #' @param length.out Default 200. Used for making predictions
 #' @param zero.thresh Proportion (between 0 and 1) of data which must have non-zero observations. I.e., if data contains 50% zeroes and zero.thresh = 0.30 (30%), then it will not compute.
 #' @param family Family for gam
+#' @param rds.filename
 #' @param mod.formula Class formula. If blank default value ~ s(year) + hours
 #' @param ll.thresh Loglikthood ratio cutoff. Default 1.5
 #' @param mod.sel.ind Criterion for choosing best AR model when AR fits better than non-AR. Right now only have logLik.
 runGams <- function(df = birds.grouped,
+                    rds.filename = "SPECIFYFILENAME",
                     mod.formula  = as.formula("value ~ s(year) + hours"),
                     family = "quasipoisson",
                     lr.alpha = 0.05,
@@ -70,7 +72,8 @@ gam.results <- list()
                mutate(value = sum(value)) %>%
                distinct(group.var, year, .keep_all = T)
 
-       if(group.var == "ind" & mod.formula  == "value ~ s(year, by = \"key\") + hours"){
+       if(group.var == "ind" & (mod.formula  == "value ~ s(year, by = \"key\") + hours" |
+                                mod.formula  == "value ~ s(year, by = \"key\") + key + hours")){
            thresh = zero.thresh*nrow(df %>% distinct(year))
            gam.data <- df %>%
                filter(group.var == index[i]) %>%
@@ -128,7 +131,7 @@ gam.results <- list()
        gamplots.dir <- paste0(fig.out.path, "gamPlots/")
        dir.create(gamplots.dir)
        pdf(file = paste0(gamplots.dir, "gamPlots_", group.var, "_", index[[i]], Sys.Date(),".pdf"))
-       plot(gam.results[[i]])
+       plot(gam.results[[i]], pages = 3)
         dev.off()
        names(gam.results)[[i]] <- index[i]
 
@@ -165,7 +168,7 @@ gam.results <- list()
 gam.results <- Filter(Negate(is.null), gam.results)
 
 # save to file
-saveRDS(gam.results, paste0(here(),"/Results/gamResults_", group.var, Sys.Date(),".rds"))
+saveRDS(gam.results, paste0(here(),"/Results/gamResults_", rds.filename, Sys.Date(),".rds"))
 
 
 return(gam.results)
