@@ -59,7 +59,8 @@ Deriv <- function(mod,
                   newdata) {
     m.terms <- attr(terms(m2$gam), "term.labels")
 
-    if (isTRUE(all.equal(class(mod), "list"))) mod <- mod$gam
+    if (isTRUE(all.equal(class(mod), "list")))
+        mod <- mod$gam
 
 
     if (!exists("newdata")) {
@@ -226,6 +227,3 @@ plot.Deriv <- function(x,
     layout(1)
     invisible(x)
 }
-
-
-

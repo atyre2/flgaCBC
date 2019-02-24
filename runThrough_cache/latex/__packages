@@ -17,3 +17,6 @@ shiny
 nlme
 mgcv
 gratia
+qgam
+rgl
+mgcViz

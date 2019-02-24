@@ -4,7 +4,6 @@ author: "Burnett, JL"
 date: "February 20, 2019"
 output: pdf_document
 ---
-
 ```{r libs, include=F}
 # Install packages as necessary
 list.of.packages <- c(
@@ -16,13 +15,13 @@ if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages, require, character.only = TRUE)
 
 # Install git packages 
-# devtools::install_github("trashbirdecology/flgaCBC", force = F)
+devtools::install_github("trashbirdecology/flgaCBC", force = F)
 library(flgaCBC)
 ```
 
-```{r setup, include=FALSE}
+```{r setup, include = F}
 # Set default chunk options
-knitr::opts_chunk$set( include = F, fig.cap = "...", cache = T)
+knitr::opts_chunk$set( warning = F, message = F,  fig.cap = "...", cache = T, eval=T, echo=F)
 # Define directories and create as necessary
 dataDir <- paste0(here::here(), "/data/")
 ```
@@ -67,6 +66,7 @@ birds <- estRichness(birds, missingSpp, ignore = missingSpp[c(9)] ) %>%
 rm(nacc, birds_1957to2015, birds2016_2018)
 
 ```
+
 # Introduction
 CBC and BBS have become powerful tools for understanding large-scale patterns of population changes in North American birds, having been applied to guilds, and individual species.  
 Restrictions and major biases, however, do apply to these citizen science data (Dunn et al. 2005). 
@@ -103,18 +103,20 @@ partic.p <- ggplot(data = birds %>% distinct(year, participants))+
 gridExtra::grid.arrange(rich.p, hours.p, partic.p)
 ```
 
-The count format (broken up into 11 teams and all day counts) was instituted in 1972, so i think that would be a good time to begin. Therefore, we analze data from `r paste(startYear)` to `r paste(max(birds$year))`.
+The count format (broken up into 11 teams and all day counts) was instituted in 1972. Therefore, we analyzed data from ß`r paste(startYear)` to `r paste(max(birds$year))`.
 
+## Grouping of species
 
-## Group the species 
+Let me know if you want any to change. 
 
-```{r groupSpecies, include = F, echo=F, warning=F, message=F}
+```{r groupSpecies}
 # Get species groupings
 sppGroups <- speciesGroups() 
 # Make a data frame from output 
 sppGroups <- stack(setNames(sppGroups, names(sppGroups)))
 
 birds.new <- sppGroups %>% left_join(birds %>% select(family, key) %>% rename(values = key))
+
 # see if there are discrepancies between sppGroups and birds common names
 (to.edit.sppGroups <- birds.new %>% distinct(values, family) %>%  filter(is.na(family)))
     # the typos should now all just be spp that dont exist in your CBC data, rather than typos!
@@ -122,7 +124,7 @@ birds.new <- sppGroups %>% left_join(birds %>% select(family, key) %>% rename(va
 
 In some portions, we present results in groups of species according to various hypotheses. Species groupings are as follows: `r unique(sppGroups$ind)` (see Table \@ref(sppGroupTab)).
 
-```{r sppGroupTab, include = T, echo=F, warning=F, message=F}
+```{r sppGroupTab}
 # Munge data frame for table
 birds.new.wide <- birds.new %>% 
     filter(!is.na(family)) %>% 
@@ -155,43 +157,56 @@ birds.new.wide %>%
 ```
 
 
-# Statistical analysis of population trends
-## Model structure
+# Statistical analysis of population trends 
+
+## Generalized additive models
+
 We estimated species population trends in the Gainesville, Florida Christmas Bird Count (CBC; National Audubon Society REF) circle (FLGA) for the period of `r startYear` to 2015 using generalized additive models (GAMs, Hastie and Tibshirani 1990; Wood 2006). GAMs are a flexible implementation of generalized linear models in cases where species’ populations exhibit non-linear trends. GAMs optimize the predictability of the relationship between the response and predictor variable(s) while accounting for the noise associated with year-to-year fluctuations in species counts. 
 
 We ran two types of analyses: (i) species-level trends and (ii) group-level trends.
 
-### Species-level trends
-This model includes a factor for species identity. A smooth is produced for each species over time, and is also included as a fixed effect. A by variable may also be a matrix if covariates are matrices: in this case implements linear functional of a smooth (see gam.models and linear.functional.terms for details).
+### Model type 1: Species-level trends (I do not think we should use these models)
 
+This model includes a factor for species identity. A smooth is produced for each species over time, and is also included as a fixed effect. We assumed the response variable distribution as Poisson. This means that the expected value after log transformation is modelled to be linearly dependent on the explanatory variables.
 
-### Group trends
-
-
-\@ref(tab:sppGroupTab)). Next, we analyzed individual species trends. 
-We analyzed individual species’ trends using the a generalized additive model: 
 
 \begin{equation} 
-g(E(y_i)) = \beta_0 f(year_i) + \epsilon_i, \\
-y_i ~ some exp. distribution
+g(E(y_g)) = \beta_0 f(year, species) + species + hours + \epsilon_i, \\
+y_g ~ quasi-poisson \\
+where g is species group
 \end{equation} 
 
-- Most species trends were non-linear over the study period. GAM optimizes the residuals by fitting knots in the model (count, response value), so if the trend is linear, it will fit it.
-- ARound 1980 the hours effort and number of participants increased linearally, therefore we did not fit a smooth to the hours effort (see \@ref(fig:effortPlots)). 
-- We controlled for temporal autocorrelation by taking first, second, adn third differences (AR1, AR2, and AR3). We chose the best fitting model for each species by running likelihood ratios
-- A GAM basically a GLM where the linear preditor(s) are influenced by some unknown smooth function, and a GAMM is a GLMM where "..."
-- "for a Poisson model the expected value after log transformation is modelled to be linearly dependent on the explanatory variables""
-- 
+### Model type 2: Group trends 
 
+We analyzed individual species’ trends using the following model:
+
+\begin{equation}
+g(E(y_species)) = \beta_0 f(year, species) + hours + \epsilon_i, \\
+y_species ~ quasi-poisson
+where g is species group
+\end{equation}
+
+
+# Results
+
+- Unless we plan on expicitly adding the species counts across groups, we should just interpret individual species' trends in groups. 
+- Many species trends were non-linear over the study period. GAM optimizes the residuals by fitting knots in the model (count, response value), so if the trend is linear, it will fit it.
+    * However, I would like to go back through and run *glm(bpph~year)* or *glm(count~year)* on those. 
+    * Another issue is species which do not occur or left the area during our study period. Right now our model assumes missing data as zero (e.g. see Figure \@ref(fig:hofiEx)). 
+    * Another issue is species whose counts are highly variable (e.g., Red-Winged Blackbird; see Figure \@ref(fig:rwbbFig))
+- Around 1980 the hours effort and number of participants increased linearally, therefore we did not fit a smooth to the hours effort (see Figure \@ref(fig:effortPlots)). 
+- I also looked a temporal autocorrelation (see [the plots in this link]()). It's strange because the effect of temporal autocorrelation for many species was different at 1 & 3 yeras vs. 0 and 2 years
+- We controlled for temporal autocorrelation by taking first, second, adn third differences (AR1, AR2, and AR3). We chose the best fitting model for each species by running likelihood ratios
+<!-- - A GAM basically a GLM where the linear preditor(s) are influenced by some unknown smooth function, and a GAMM is a GLMM where "..." -->
 
 ## Analysis results
-```{r runModels, cahe = T}
+```{r runModels, eval = F}
 # Add groups to the bird data
 birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family)) %>%
     distinct()
 
 # Run some basic GAMs.
-# Run the gam for species (ind by spp)
+Run the gam for species (ind by spp)
 gam.results.ind <- runGams(df = birds.grouped, family = "quasipoisson",
                            group.var = "ind",
                            rds.filename =  "groupLevelWithFixed",
@@ -217,25 +232,57 @@ gam.results.key     <-readRDS(paste0(here::here(),"/Results/gamResults_","specie
 
 ```
 
-We controlled for stationarity by taking second differences (i.e., using an AR model with lag = 2).
+```{r sppAnalysedTab}
 
-```{r sppAnalysedTab, include = T, echo=F, warning=F, message=F}
+if(!exists("birds.grouped")) birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family)) %>%
+    distinct()
 
+gam.results.key     <-readRDS(paste0(here::here(),"/Results/gamResults_","speciesLevel",  Sys.Date(),".rds"))
 # Maake the table
- unique(names(gam.results.key)) %>% 
+t = unique(names(gam.results.key))
+t %>% 
+      kable(format    = "latex", 
+      longtable = T, 
+      booktabs  = T, 
+      caption   = paste0("Species analysed: ", length(t))) %>% 
+    kable_styling(full_width = F, font_size = 9)#, latex_options = c("repeat_header"))
+```
+
+```{r hofiEx, fig.cap="Example of missing data prior to year YYYY. We might want to go back through and adjust our start year for those species that did not occur in the region before or after some year (**i.e. will need expert advice**)."}
+ts= birds.grouped %>% filter(key == "House Finch") %>% 
+    distinct(year, key, value, hours)
+ggplot(ts, aes(year, value))+
+    geom_point()+
+    geom_smooth()+
+    ylab("House Finch")
+```
+
+```{r rwbbFig, cache = T, include=T,echo=F, eval=T, fig.cap="HOFI example -- species entering or leaving region for sequential years within our study period."}
+
+ts=birds.grouped %>% filter(key == "Red-Winged Blackbird") %>% 
+    distinct(year, key, value, hours)
+ggplot(ts, aes(year, value))+
+    geom_point()+ylab("Red-Winged Blackbird")+
+    # geom_smooth(method='lm')+
+    geom_smooth(method ="gam")
+```
+
+```{r sppNotAnalysedTab}
+# Maake the table
+t=birds.grouped %>% distinct(key) %>% filter(!key %in% unique(names(gam.results.key)))
+ t %>%
   kable(format    = "latex", 
       longtable = T, 
       booktabs  = T, 
-      caption   = "Species with sufficient data for analysis") %>% 
+      caption   = paste0("Species **NOT** analysed: ", length(t))) %>% 
     kable_styling(full_width = F, font_size = 9)#, latex_options = c("repeat_header"))
 ```
 
 
 
+<!-- # References not yet defined in .bib -->
 
-# References not yet defined in .bib
-
-Fewster, Rachel M., et al. "Analysis of population trends for farmland birds using generalized additive models." Ecology 81.7 (2000): 1970-1984.
-Hastie, Trevor J., and Robert J. Tibshirani. Generalized additive models. Vol. 43. CRC Press, 1990.
-R Core Team (2015). R: A language  and environment for statistical computing. R Founding for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
-Wood, S.N. (2006) Generalized Additive Models: An Introduction with R. Chapman and Hall/CRC. 
+<!-- Fewster, Rachel M., et al. "Analysis of population trends for farmland birds using generalized additive models." Ecology 81.7 (2000): 1970-1984. -->
+<!-- Hastie, Trevor J., and Robert J. Tibshirani. Generalized additive models. Vol. 43. CRC Press, 1990. -->
+<!-- R Core Team (2015). R: A language  and environment for statistical computing. R Founding for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/. -->
+<!-- Wood, S.N. (2006) Generalized Additive Models: An Introduction with R. Chapman and Hall/CRC. -->

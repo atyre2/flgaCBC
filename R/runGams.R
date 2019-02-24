@@ -31,8 +31,8 @@ runGams <- function(df = birds.grouped,
 
 # Directories -------------------------------------------------------------------
 
-    if( !exists("fig.out.path")) fig.out.path <- paste0(here::here(), "/Figures/")
-    if(is.null(fig.out.path)) fig.out.path <- paste0(here::here(), "/Figures/")
+if( !exists("fig.out.path")) fig.out.path <- paste0(here::here(), "/Figures/")
+if(is.null(fig.out.path)) fig.out.path <- paste0(here::here(), "/Figures/")
 
 # Create dir if it does not exist
 dir.create(paste0(here::here(), "/Results"))

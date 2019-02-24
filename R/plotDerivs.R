@@ -6,7 +6,7 @@
 #' @fig.ind Figure index, for naming plot files
 #' @param term Term for plotting.
 
-getAndPlotDerivs <- function(myMod, gam.data, length = 200, fig.ind = index[i], term = "year")
+getAndPlotDerivs <- function(myMod, gam.data, length = 200, fig.ind = index[i], term = "year"){
 myMod <- gams.groups$bestModels[[1]]
 
 # pdat <- get.pdat(gam.data, 200)
@@ -63,8 +63,5 @@ if(get.error.plots){
     dev.off()
 
 }
-
-# end for loop i
-
-# Combine lists for function export
+}
 

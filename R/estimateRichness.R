@@ -3,7 +3,6 @@
 #' @param ignore Character vector of species to ignore from missingSpp (i.e., these will be included in species richness estimate).
 #' @export estRichness
 #' @description Estimates total species richness after munging the data, and removing the non-species-specific IDs.
-
 estRichness <- function(df, missingSpp, ignore = NULL){
 
     # detach("package:plyr", unload=TRUE)
