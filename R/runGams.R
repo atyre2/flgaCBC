@@ -14,7 +14,7 @@
 #' @param mod.sel.ind Criterion for choosing best AR model when AR fits better than non-AR. Right now only have logLik.
 runGams <- function(df = birds.grouped,
                     rds.filename = "SPECIFYFILENAME",
-                    mod.formula  = as.formula("value ~ s(year) + hours"),
+                    mod.formula  = NULL,
                     family = "quasipoisson",
                     lr.alpha = 0.05,
                     group.var,
@@ -31,7 +31,8 @@ runGams <- function(df = birds.grouped,
 
 # Directories -------------------------------------------------------------------
 
-if(is.null(fig.out.path)) fig.out.path <- paste0(here::here(), "/Figures/")
+    if( !exists("fig.out.path")) fig.out.path <- paste0(here::here(), "/Figures/")
+    if(is.null(fig.out.path)) fig.out.path <- paste0(here::here(), "/Figures/")
 
 # Create dir if it does not exist
 dir.create(paste0(here::here(), "/Results"))
@@ -72,9 +73,9 @@ gam.results <- list()
                mutate(value = sum(value)) %>%
                distinct(group.var, year, .keep_all = T)
 
-       if(group.var == "ind" & (mod.formula  == "value ~ s(year, by = \"key\") + hours" |
-                                mod.formula  == "value ~ s(year, by = \"key\") + key + hours")){
+       if(group.var == "ind" & any(str_detect(mod.formula, "key"))){
            thresh = zero.thresh*nrow(df %>% distinct(year))
+
            gam.data <- df %>%
                filter(group.var == index[i]) %>%
                group_by(year, group.var, key) %>%
@@ -88,19 +89,21 @@ gam.results <- list()
                filter(n > thresh) %>%
                ungroup() %>% #just in case!
                distinct(key)
-            gam.data <- gam.data %>% filter(key %in% spp.keep$key)
+            gam.data <- gam.data %>% filter(key %in% spp.keep$key) %>%
+                mutate(key=as.factor(key))
 
-            mod.formula <- as.formula(value ~ s(year, by = as.factor(key)) + hours)
-               }
+            mod.formula <- as.formula("value ~ s(year, by = as.factor(key)) + key + hours")
 
+            # mod.formula <- as.formula("value ~ s(year, by = \"key\") + key + hours")
 
-       if(group.var == "ind" & mod.formula  != "value ~ s(year, by = \"key\") + hours")
-           gam.data <- df %>%
+           }else(
+               gam.data <- df %>%
                filter(group.var == index[i]) %>%
                group_by(year, group.var) %>%
                mutate(value = sum(value)) %>%
                ungroup() %>%
                distinct(year, group.var, .keep_all = T)
+           )
 
 
 
@@ -110,7 +113,7 @@ gam.results <- list()
            nrow()
 
 
-       if(zero.count > zero.thresh * nrow(gam.data)){
+       if(zero.count > zero.thresh * nrow(gam.data) & group.var != "ind"){
            print(paste0("Skipping index: ", index[i], ", exceeds zero.thresh"));
            next}
 
@@ -122,17 +125,25 @@ gam.results <- list()
         ## NOTE: For count data consider poisson (mean=var) and quasi-poisson models (quasi meaning variance is assumed to be a linear function of the mean) models
        ## Clear the previous models before running new ones
 
-       gam.results[[i]] =
+       gam.results[[i]] <-
                 mgcv::gam(
-                    mod.formula,
-                    method = "REML",
                     data = gam.data,
+                    mod.formula,
+                    method = "ML",
                     family = family)
        gamplots.dir <- paste0(fig.out.path, "gamPlots/")
        dir.create(gamplots.dir)
-       pdf(file = paste0(gamplots.dir, "gamPlots_", group.var, "_", index[[i]], Sys.Date(),".pdf"))
-       plot(gam.results[[i]], pages = 3)
-        dev.off()
+
+       # Save some mgcv base plots
+       pdf(file = paste0(gamplots.dir, "gamPlotsMGCV_", rds.filename, group.var, "_", index[[i]], Sys.Date(),".pdf"))
+       if(group.var=="ind") plot(gam.results[[i]], scale=0, all.terms = T)
+       if(group.var=="key") plot(gam.results[[i]], scale=0, all.terms = F)
+       dev.off()
+       # Save some GRATIA plots
+       # pdf(file = paste0(gamplots.dir, "gamPlotsGRATIA_", rds.filename, group.var, "_", index[[i]], Sys.Date(),".pdf"))
+       # draw(gam.results[[i]])
+       # dev.off()
+
        names(gam.results)[[i]] <- index[i]
 
         # Run ar-X models.
@@ -161,7 +172,7 @@ gam.results <- list()
         #             family = family)
         #         }
 
-
+print(paste0("end run: ", index[i]," of ", length(index)))
 } # END FOR LOOP I
 
 # remove the empty elements (species/groups skipped)

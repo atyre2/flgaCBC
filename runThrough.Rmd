@@ -8,7 +8,7 @@ output: pdf_document
 ```{r libs, include=F}
 # Install packages as necessary
 list.of.packages <- c(
-    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools", "kableExtra", "stargazer", "nlme", "mgcv", "gratia")
+    "stringr","ggplot2",  "here",  "knitr", "tidyr", "reshape2", "readr", "dplyr", "devtools", "kableExtra", "stargazer","mgcViz" ,  "nlme", "mgcv", "gratia")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
@@ -161,7 +161,14 @@ We estimated species population trends in the Gainesville, Florida Christmas Bir
 
 We ran two types of analyses: (i) species-level trends and (ii) group-level trends.
 
-ng two GAMs. First, we aggregated species into groups, and (see \@ref(tab:sppGroupTab)). Next, we analyzed individual species trends. 
+### Species-level trends
+This model includes a factor for species identity. A smooth is produced for each species over time, and is also included as a fixed effect. A by variable may also be a matrix if covariates are matrices: in this case implements linear functional of a smooth (see gam.models and linear.functional.terms for details).
+
+
+### Group trends
+
+
+\@ref(tab:sppGroupTab)). Next, we analyzed individual species trends. 
 We analyzed individual species’ trends using the a generalized additive model: 
 
 \begin{equation} 
@@ -187,38 +194,26 @@ birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omi
 # Run the gam for species (ind by spp)
 gam.results.ind <- runGams(df = birds.grouped, family = "quasipoisson",
                            group.var = "ind",
-                           rds.filename =  "indSum.withFixedEf",
-                           mod.formula  = as.formula("value ~ s(year, by = \"key\") + key + hours"),
+                           rds.filename =  "groupLevelWithFixed",
+                           mod.formula  = as.formula("value ~ s(year, by = as.factor(key)) + key + hours"),
                            fig.out.path = NULL,
                            year.start = 1973,
-                           zero.thresh = 0.11,
+                           zero.thresh = 0.25,
                            length.out = 200)
-plot(gam.results.ind[[1]])
-# Run the gam for species (ind by spp)
-# gam.results.ind.sum <- runGams(df = birds.grouped, family = "quasipoisson",
-#                            group.var = "ind",
-#                            mod.formula  = as.formula("value ~ s(year) + hours"),
-#                            fig.out.path = NULL,
-#                            year.start = 1973,
-#                            zero.thresh = 0.11,
-#                            length.out = 200)
+gam.results.ind     <-readRDS(paste0(here::here(),"/Results/gamResults_","groupLevelWithFixed",  Sys.Date(),".rds"))
+
 
 # Run the gam for species (key)
-# gam.results.key <- runGams(df = birds.grouped, family = "quasipoisson",
-#                    group.var = "key",
-#                    mod.formula  = as.formula("value ~ s(year) + hours"),
-#                    fig.out.path = NULL,
-#                    year.start = 1973,
-#                    zero.thresh = 0.11,
-#                    length.out = 200)
+gam.results.key <- runGams(df = birds.grouped, family = "quasipoisson",
+                   group.var = "key",
+                   rds.filename =  "speciesLevel",
+                   mod.formula  = as.formula("value ~ s(year) + hours"),
+                   fig.out.path = NULL,
+                   year.start = 1973,
+                   zero.thresh = 0.11,
+                   length.out = 200)
 
-gam.results.key     <-readRDS(paste0(here::here(),"/Results/gamResults_key2019-02-23.rds"))
-gam.results.ind     <-readRDS(paste0(here::here(),"/Results/gamResults_ind2019-02-23.rds"))
-gam.results.ind.sum <-readRDS(paste0(here::here(),"/Results/gamResults_indSum2019-02-23.rds"))
-
-gam.results.ind.sum <-readRDS(paste0(here::here(),"/Results/gamResults_indSum2019-02-23.rds"))
-
-
+gam.results.key     <-readRDS(paste0(here::here(),"/Results/gamResults_","speciesLevel",  Sys.Date(),".rds"))
 
 ```
 
