@@ -86,7 +86,7 @@ to.edit.sppGroups <- birds.new %>% distinct(values, family) %>%  filter(is.na(fa
     # the typos should now all just be spp that dont exist in your CBC data, rather than typos!
 ```
 
-```{r runModels, message=F, warning=F, include=FALSE}
+```{r runModels, eval=F, message=F, warning=F, include=FALSE}
 # Add groups to the bird data
 birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family)) %>%
     distinct()
