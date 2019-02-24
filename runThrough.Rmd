@@ -146,7 +146,7 @@ We estimated species population trends in the Gainesville, Florida Christmas Bir
 This model includes a factor for species identity. A smooth is produced for each species over time, and is also included as a fixed effect. We assumed the response variable distribution as Poisson. This means that the expected value after log transformation is modelled to be linearly dependent on the explanatory variables.
 
 \begin{equation} 
-g(E(y_i)) = \beta_0 f(year_i) + hours + \epsilon_i, 
+g(E(y_i)) = \beta_0 f(year_i) + hours + \epsilon_i
 \end{equation} 
 <!-- y_g ~ quasi-poisson -->
 
@@ -157,7 +157,7 @@ g(E(y_i)) = \beta_0 f(year_i) + hours + \epsilon_i,
 <!-- \begin{equation} -->
 <!-- g(E(y_g)) = \beta_0 f(year, species) + species + hours + \epsilon_i,  -->
 <!-- \end{equation} -->
-<!-- <!-- y_species ~ quasi-poisson --> -->
+<!-- <!-- y_species ~ quasi-poisson -->  
 
 
 # Results
@@ -218,13 +218,14 @@ birds.new.wide %>%
 if(!exists("birds.grouped")) birds.grouped <- full_join(birds, birds.new %>% rename(key = values) %>%  na.omit(family)) %>%
     distinct()
 
-gam.results.key     <-readRDS(paste0(here::here(),"/Results/gamResults_","speciesLevel",  Sys.Date(),".rds"))
+gam.results.key <- readRDS(paste0(here::here(),"/Results/gamResults_","speciesLevel",  Sys.Date(),".rds"))
 # Maake the table
 
 t = data.frame(key=as.factor(unique(names(gam.results.key)))) %>% 
     left_join(birds.grouped %>% distinct(ind, family, key)) %>%
     select(ind, family, key) %>% 
     mutate(ind = str_replace_na(ind, "No group assigned"))  %>%
+    mutate(family = str_replace_na(ind, "family"))  %>%
     arrange(ind)
 
 t %>% 
@@ -243,6 +244,7 @@ t %>%
 # Maake the table
 t=birds.grouped %>% distinct(ind, family, key) %>% filter(!key %in% unique(names(gam.results.key))) %>% 
     mutate(ind = str_replace_na(ind, "No group assigned"))  %>%
+    mutate(family = str_replace_na(ind, "family"))  %>%
     select(ind, family, key) %>% 
     arrange(ind)
  t %>%
